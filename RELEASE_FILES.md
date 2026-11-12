@@ -17,7 +17,7 @@ Release list confirmed by Simon 2026-10-27 after his review (RULES §25). sha256
 | `bug_evidence/README.md` | c621384615636e3ddc09b63106c8e450d65edcb9136db238f98edb0d67d22964 |
 | `bug_evidence/rerun/r01_attention_axis_output_rerun_20261027.txt` | a9e1648f2bfe2d9a11d430069ef5bbd51b0711dba55f8b99643044bc4435464c |
 | `bug_evidence/rerun/r01_stderr.txt` | e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 |
-| `CITATION.cff` | 158f152e4ef21e4bd120ee9edad94466a544643d7a74cb0235799f809e7a1d25 |
+| `CITATION.cff` | 4bcb041d527001cf686c43e8402d988b15a4199589fd75118c63db783e0b0abb |
 | `configs/arms/sensor_orders.json` | cdd245759d3f3a03a7fa3d90019196b5cd0c3df6efec6d39cb76526c2365a004 |
 | `configs/arms/subsample_ids.json` | a406cf0d82b2729f45bf3d5244234b7ecee595f141a1fa4cfb2a053da29afde6 |
 | `configs/data_splits.json` | 88840135f2020050a989230ea00da9428d0d1d81dd84c2c96370876144940eab |
@@ -137,7 +137,7 @@ Release list confirmed by Simon 2026-10-27 after his review (RULES §25). sha256
 | `figures/fig_v01_7_fd004_regime_v02.png` | 50819cf417f6a5148991fa76b71f7478ab7f9b53f918883553a47fe87e716a18 |
 | `LICENSE` | 00332cb0c817c9a086085f3963375b3d87df136416229db439309a40356114c8 |
 | `pyproject.toml` | f90f0675575727f6479f2c6fc23893b92d2fc2fe5c02216075075631740d8409 |
-| `README.md` | 4c9ea2d159d78e9d5d7389362e2e0de1ba12d0f061bf33cae2d3d002a498b6fe |
+| `README.md` | 93bc11fcf884bfdd400deb1225ce6d2b044bec960ddbfdffe9da36bce2fb3342 |
 | `results/frozen/combined_table_v4.csv` | 4f4d5368add2dbd6737e683290744f52c00eb014da457da55045bd939c02a628 |
 | `results/frozen/combined_table_v4.json` | 189d784f96d79f017cc9886367b1b5c5773e3921ecc8355a4cd9bde71d29eb55 |
 | `results/frozen/combined_table_v4.md` | e994beca237516a318a759dc1dced813e2ee2be4ddf9b8cf7480d24d440566a6 |

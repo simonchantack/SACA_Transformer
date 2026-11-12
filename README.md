@@ -1,5 +1,7 @@
 **Sensor-Anchored Cross-Dimension Attention for Remaining Useful Life Prediction of Turbofan Engines: A Diagnosis-Driven Redesign**
 
+[![DOI](https://zenodo.org/badge/1439133050.svg)](https://doi.org/10.5281/zenodo.24152407)
+
 # saca_rul: release code for the ESWA revision
 
 Corrected base model (theta*), the redesigned model **D4 "SACA"** (sensor-anchored cross-dimension attention), the
@@ -15,6 +17,10 @@ Wording limit (paper_plan D1-D51): D4 is not claimed to outperform the baselines
 comparison is inconclusive; D4 is non-inferior at a 0.5 RMSE margin. See `results/` and `figures/fig_v01_2_primary_pairs_v02`.
 
 License: MIT (see `LICENSE`). Vendored upstream code under `src/saca_rul/vendored/` keeps its own licence files and modification headers (see `src/saca_rul/vendored/VENDORED.md`).
+
+## How to cite
+
+If you use this code, please cite the archived release (version DOI): [10.5281/zenodo.24152408](https://doi.org/10.5281/zenodo.24152408). Machine-readable citation metadata are in `CITATION.cff`.
 
 ## 1. Setup
 
