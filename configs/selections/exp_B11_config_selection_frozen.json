@@ -1,0 +1,160 @@
+{
+ "experiment_id": "exp_B11",
+ "model": "itransformer",
+ "per_subset": {
+  "FD002": {
+   "trial_id": "2:0",
+   "value": 13.753774730904688,
+   "params": {
+    "L": 50,
+    "batch_size": 256,
+    "d_model": 256,
+    "dropout": 0.1763115225304259,
+    "e_layers": 3,
+    "lr": 7.424116619296482e-05,
+    "m": 2,
+    "n_heads": 4,
+    "use_norm": false,
+    "weight_decay": 1.8243300267253303e-05
+   },
+   "n_params": 1598977,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4
+    },
+    "1": {
+     "COMPLETE": 4
+    },
+    "2": {
+     "COMPLETE": 4
+    }
+   },
+   "study_best_values": [
+    13.829486009892673,
+    13.76201345948391,
+    13.753774730904688
+   ],
+   "study_best_spread": 0.0757112789879848,
+   "pooled_trials_sha256": "41cb1c8aa1c5b172a482d6babe7aad81d06c5d27ca6090c68278c6c47ec4985e",
+   "frozen_at": "2026-10-22T00:30:06",
+   "test_data_used": false
+  },
+  "FD003": {
+   "trial_id": "1:1",
+   "value": 10.928020685305182,
+   "params": {
+    "L": 50,
+    "batch_size": 128,
+    "d_model": 128,
+    "dropout": 0.2473198321128721,
+    "e_layers": 4,
+    "lr": 1.479409566599644e-05,
+    "m": 2,
+    "n_heads": 4,
+    "use_norm": false,
+    "weight_decay": 1.3096774493777606e-06
+   },
+   "n_params": 538113,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4
+    },
+    "1": {
+     "COMPLETE": 4
+    },
+    "2": {
+     "COMPLETE": 4
+    }
+   },
+   "study_best_values": [
+    11.089387202342763,
+    10.928020685305182,
+    11.028713636405838
+   ],
+   "study_best_spread": 0.16136651703758176,
+   "pooled_trials_sha256": "06c468e17d55cea2ecbec800fdba606a14fdd47e347796ac6bef412f84b0b98b",
+   "frozen_at": "2026-10-22T00:55:55",
+   "test_data_used": false
+  },
+  "FD001": {
+   "trial_id": "2:2",
+   "value": 10.658553033170152,
+   "params": {
+    "L": 40,
+    "batch_size": 256,
+    "d_model": 64,
+    "dropout": 0.1391560702806897,
+    "e_layers": 1,
+    "lr": 0.0008081360003631,
+    "m": 1,
+    "n_heads": 8,
+    "use_norm": false,
+    "weight_decay": 4.2916518186092174e-05
+   },
+   "n_params": 28801,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4
+    },
+    "1": {
+     "COMPLETE": 4
+    },
+    "2": {
+     "COMPLETE": 4
+    }
+   },
+   "study_best_values": [
+    11.345771593805445,
+    11.209362370838264,
+    10.658553033170152
+   ],
+   "study_best_spread": 0.6872185606352925,
+   "pooled_trials_sha256": "c4faa2ee032d16b14b59e97a23677cc2c7d5930499301a11ca8695d099b57be1",
+   "frozen_at": "2026-10-22T01:25:08",
+   "test_data_used": false
+  },
+  "FD004": {
+   "trial_id": "1:1",
+   "value": 13.694647990096762,
+   "params": {
+    "L": 50,
+    "batch_size": 128,
+    "d_model": 128,
+    "dropout": 0.2473198321128721,
+    "e_layers": 4,
+    "lr": 1.479409566599644e-05,
+    "m": 2,
+    "n_heads": 4,
+    "use_norm": false,
+    "weight_decay": 1.3096774493777606e-06
+   },
+   "n_params": 538625,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4
+    },
+    "1": {
+     "COMPLETE": 4
+    },
+    "2": {
+     "COMPLETE": 4
+    }
+   },
+   "study_best_values": [
+    14.30279688091752,
+    13.694647990096762,
+    13.857060640107996
+   ],
+   "study_best_spread": 0.6081488908207575,
+   "pooled_trials_sha256": "2e496c2526e89f50b95a37b3fa31359b8cee6070b86679c85a9e8575663c788e",
+   "frozen_at": "2026-10-22T02:01:23",
+   "test_data_used": false
+  }
+ },
+ "rule": "argmin over the pooled completed trials of the 3 studies; exact ties -> fewer parameters",
+ "protocol_sha256": "d41d8bd82494264ffcd6aa819947a12408a969a2635c400b4cf0a60a0d6e01e7"
+}

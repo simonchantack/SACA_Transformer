@@ -1,0 +1,32 @@
+# D4 tied dropout p = 0.1 (dropout_t = dropout_c); validation only; the frozen configuration is unchanged.
+description: D4 tied dropout p = 0.1 (dropout_t = dropout_c); validation only; the frozen configuration is unchanged.
+experiment_id: exp_A13_p0.1
+concerns:
+- R2.14
+- R3.3
+- R1.12
+family: r3_D4
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_A13_p0.1_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm:
+  name: p0.1
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: none (validation only)
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_A13_p0.1
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_04/exp_A13/p0.1
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}

@@ -1,0 +1,34 @@
+# PatchTST baseline (official code, regression head). FD001, FD002, FD004: exp_B10_topup; FD003: exp_B10.
+description: 'PatchTST baseline (official code, regression head). FD001, FD002, FD004: exp_B10_topup; FD003: exp_B10.'
+experiment_id: exp_B10_topup
+concerns:
+- R2.2
+- R1.19
+family: patchtst
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_B10_topup_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm: {}
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: evaluate_test (purpose final) after selection_frozen.json
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_B10_topup
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_02/exp_B10_topup
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}
+  frozen_dir_by_subset:
+    FD003: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_02/exp_B10
+selection_by_subset:
+  FD003: configs/selections/exp_B10_config_selection_frozen.json

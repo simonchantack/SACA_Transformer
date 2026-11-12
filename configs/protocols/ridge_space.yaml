@@ -1,0 +1,21 @@
+# R4-RIDGE search space and tuning rule (round 4; R1.19). Frozen in freeze_manifest.json (F0) before any ridge fit.
+# Authority: RULES 22 (ridge uses the same 12-trial random rule as every other model; the 39-point grid is a
+# validation-only curve). Written by eswa-experimenter-arch 2026-10-25 from plan_validation.md 3.3 for the owner
+# eswa-experimenter-validation. CPU only. No test data is read by tuning or by the grid.
+model: ridge
+estimator: 'sklearn.linear_model.Ridge(alpha=alpha, solver="cholesky", fit_intercept=True)'
+input: 'P2 DataCache windows (TR-only pipeline, causal EMA alpha 0.24723, RUL cap 125); X (N, C, L) flattened row-major to (N, C*L)'
+adapter: 'experiments/round_04/r4code/adapters/baselines.py: ridge_from_sklearn() -> RidgeLinear (float64), save_ridge_ckpt()'
+study_seeds: [0, 1, 2]
+sampler: {name: RandomSampler, seed: study_seed}
+completed_trials_per_study: 4
+space:                     # draw order matters (RandomSampler)
+  L: {type: categorical, choices: [30, 40, 50]}
+  alpha: {type: float, low: 1.0e-3, high: 1.0e+3, log: true}
+objective: {metric: val_RMSE_support, split_seed: 0, support_min_label_cycle: 51, direction: minimize}
+selection: 'argmin over the 12 pooled completed trials; exact ties -> fewer parameters (C*L + 1), then smaller alpha'
+grid_sensitivity:          # validation-only curve; never used for selection
+  alpha: '10 ** (-3 + 0.5 * k), k = 0..12 (13 points, 1e-3 .. 1e3)'
+  L: [30, 40, 50]
+  points: 39
+refit: 'TR of split seeds 0-4 at the selected (alpha, L); 20 test reads, purpose r4_final_baseline, one per (subset, seed)'

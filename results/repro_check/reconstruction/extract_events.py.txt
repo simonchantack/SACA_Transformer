@@ -1,0 +1,13 @@
+import json,sys
+sys.stdout.reconfigure(encoding='utf-8')
+T=sys.argv[1]; seen=set(); out=[]
+for line in open(T,encoding='utf-8'):
+    try:d=json.loads(line)
+    except: continue
+    m=d.get('message',{}); c=m.get('content') if isinstance(m,dict) else None
+    if not isinstance(c,list): continue
+    for b in c:
+        if b.get('type')=='tool_use' and b['id'] not in seen:
+            seen.add(b['id']); out.append(dict(id=b['id'],ts=d.get('timestamp'),name=b['name'],input=b['input']))
+json.dump(out,open('events.json','w',encoding='utf-8'))
+print(len(out), out[0]['ts'], out[-1]['ts'])

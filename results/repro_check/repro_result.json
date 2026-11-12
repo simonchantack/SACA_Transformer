@@ -1,0 +1,59 @@
+{
+ "cells": [
+  {
+   "config": "exp_B16_d4_main.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  },
+  {
+   "config": "exp_B6_theta_star.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  },
+  {
+   "config": "exp_B10_patchtst.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  },
+  {
+   "config": "exp_B11_itransformer.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  },
+  {
+   "config": "exp_B12_crossformer.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  },
+  {
+   "config": "exp_V2_lstm.yaml",
+   "subset": "FD001",
+   "seed": 0,
+   "best_epoch_equal": true,
+   "state_dict_equal": true,
+   "preds_val_equal": true,
+   "match": true
+  }
+ ],
+ "all_match": true
+}

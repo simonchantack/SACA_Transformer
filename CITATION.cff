@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+title: "Sensor-Anchored Cross-Dimension Attention for Remaining Useful Life Prediction of Turbofan Engines: A Diagnosis-Driven Redesign"
+authors:
+  - family-names: "Chan Tack"
+    given-names: "Simon"
+    orcid: "https://orcid.org/0009-0008-6004-7085"
+  - family-names: "Pakhrin"
+    given-names: "Subash Chandra"
+    # orcid: [TBD — Simon, ask Pakhrin; omit if none]
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/simonchantack/SACA_Transformer"
+# doi: [TBD — after Zenodo release]

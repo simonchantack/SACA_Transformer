@@ -1,0 +1,170 @@
+"""Command line: ``python -m saca_rul.cli <command>``.
+
+Frozen-artifact commands (CPU, no new numbers, no test read):
+  verify-tables   regenerate combined table v4 and compare with the frozen hashes
+  verify-posthoc  regenerate R2.10 / R0.23_c / nosmooth_b and compare with the frozen JSON
+  figures         write every figure (PNG 300 dpi + PDF)
+  shapes          D4 patch counts, token counts and tensor shapes (CPU)
+  repro           the reproduction check: retrain cells on GPU (strict deterministic), validation only, compare hashes
+
+Training commands (not run during the experiment freeze):
+  train           one (config, subset, seed) retrain; validation only
+  tune            one validation-only study (selection of the frozen configuration: tuning.select_config)
+  freeze          record the early-stopped checkpoint in selection_frozen.json before any test read
+  test-read       one logged test read of a frozen checkpoint; refuses without ``--confirm-single-read`` and
+                  without a frozen selection; never run by the reproduce scripts
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+from typing import Any
+
+from .config import ROOT, load_config
+
+
+def _cells_from_expected() -> list[dict[str, Any]]:
+    exp = json.loads((ROOT / "results" / "frozen" / "repro_expected_FD001_seed0.json").read_text(encoding="utf-8"))
+    return [{"config": str(ROOT / "configs" / f"{k}.yaml"), "subset": "FD001", "seed": 0} for k in exp]
+
+
+def cmd_repro(a: argparse.Namespace) -> int:
+    from . import gpulock
+    from .runner import repro_check
+
+    cells = _cells_from_expected()
+    if a.limit:
+        cells = cells[: a.limit]
+    use_gpu = a.device == "cuda"
+    if use_gpu:
+        gpulock.acquire("saca_rul repro check (validation only)")
+    try:
+        res = repro_check(cells, a.scratch, device=a.device)
+    finally:
+        if use_gpu:
+            gpulock.release()
+    report = [{k: v for k, v in r.items() if k in ("config", "subset", "seed", "match")} for r in res]
+    out = Path(a.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"cells": res, "all_match": all(r["match"] for r in res)}, indent=1), encoding="utf-8")
+    for r in report:
+        print(("MATCH   " if r["match"] else "MISMATCH ") + f"{r['config']} {r['subset']} seed {r['seed']}")
+    return 0 if all(r["match"] for r in res) else 3
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(prog="saca_rul", description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    p = sub.add_parser("verify-tables")
+    p.add_argument("--out-dir", default=str(ROOT / "results" / "regenerated" / "tables"))
+    p = sub.add_parser("verify-posthoc")
+    p.add_argument("--out-dir", default=str(ROOT / "results" / "regenerated" / "posthoc"))
+    p = sub.add_parser("figures")
+    p.add_argument("--out-dir", default=str(ROOT / "figures"))
+    sub.add_parser("shapes")
+    p = sub.add_parser("repro")
+    p.add_argument("--device", default="cuda")
+    p.add_argument("--scratch", default=str(ROOT / "results" / "repro_check"))
+    p.add_argument("--out", default=str(ROOT / "results" / "repro_check" / "repro_result.json"))
+    p.add_argument("--limit", type=int, default=0)
+    p = sub.add_parser("train")
+    p.add_argument("--config", required=True)
+    p.add_argument("--subset", required=True)
+    p.add_argument("--seed", type=int, required=True)
+    p.add_argument("--device", default="cuda")
+    p.add_argument("--max-epochs", type=int, default=None)
+    p.add_argument("--out-dir", default=None)
+    p = sub.add_parser("freeze")
+    p.add_argument("--config", required=True)
+    p.add_argument("--subset", required=True)
+    p.add_argument("--seed", type=int, required=True)
+    p = sub.add_parser("tune")
+    p.add_argument("--family", required=True)
+    p.add_argument("--subset", required=True)
+    p.add_argument("--study-seed", type=int, required=True)
+    p.add_argument("--protocol", required=True)
+    p.add_argument("--exp-id", required=True)
+    p.add_argument("--out-root", required=True)
+    p.add_argument("--device", default="cuda")
+    p.add_argument("--dry-run", action="store_true")
+    p = sub.add_parser("test-read")
+    p.add_argument("--config", required=True)
+    p.add_argument("--subset", required=True)
+    p.add_argument("--seed", type=int, required=True)
+    p.add_argument("--purpose", default="final")
+    p.add_argument("--confirm-single-read", action="store_true")
+    a = ap.parse_args(argv)
+
+    if a.cmd == "verify-tables":
+        from .reporting.verify import verify_tables
+
+        res = verify_tables(a.out_dir)
+        print(json.dumps(res, indent=1))
+        ok = (res["combined_table_v4.csv"]["hash_match_direct"]
+              and res["combined_table_v4.json"]["hash_match_after_provenance_substitution"]
+              and res["combined_table_v4.md"]["hash_match_after_provenance_substitution"])
+        return 0 if ok else 1
+    if a.cmd == "verify-posthoc":
+        from .reporting.verify import POSTHOC, verify_posthoc
+
+        allok = True
+        for name in POSTHOC:
+            r = verify_posthoc(name, Path(a.out_dir) / name)
+            print(json.dumps(r))
+            allok &= r["only_ignored_keys_differ"]
+        return 0 if allok else 1
+    if a.cmd == "figures":
+        from .reporting import figures
+
+        figures.main(["--out-dir", a.out_dir])
+        return 0
+    if a.cmd == "shapes":
+        from . import shapes
+
+        shapes.main([])
+        return 0
+    if a.cmd == "repro":
+        return cmd_repro(a)
+    if a.cmd == "train":
+        from .runner import run_cell
+
+        run_cell(a.config, a.subset, a.seed, out_dir=a.out_dir, device=a.device, max_epochs=a.max_epochs)
+        return 0
+    if a.cmd == "freeze":
+        from .tuning import freeze_selection
+
+        freeze_selection(load_config(a.config)["paths"]["output_dir"], a.subset, a.seed)
+        return 0
+    if a.cmd == "tune":
+        from .config import resolve_path
+        from .tuning import run_study
+
+        paths = load_config(next((ROOT / "configs").glob("exp_B16_d4_main.yaml")))["paths"]
+        run_study(a.family, a.subset, a.study_seed, resolve_path(a.protocol), paths["data_dir"], paths["splits"],
+                  a.out_root, a.exp_id, device=a.device, dry_run=a.dry_run)
+        return 0
+    if a.cmd == "test-read":
+        from .evaluation import Refused, evaluate_test
+
+        if not a.confirm_single_read:
+            print("REFUSED: a test read is single-use per frozen configuration; pass --confirm-single-read. "
+                  "Not allowed during the experiment freeze.")
+            return 2
+        cfg = load_config(a.config)
+        p = cfg["paths"]
+        try:
+            norm = "layer" if (cfg.get("arm") or {}).get("norm") == "layer" else "batch"
+            res = evaluate_test(p["output_dir"], a.subset, a.seed, p["data_dir"], p["splits"], p["test_log"],
+                                purpose=a.purpose, norm=norm)
+        except Refused as r:
+            print(f"REFUSED ({r.code}): {r}")
+            return r.code
+        print(json.dumps(res))
+        return 0
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

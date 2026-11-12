@@ -1,0 +1,34 @@
+# D4 SACA, the model of the paper: frozen configuration of the preregistered stage 2, 5 retrains per subset.
+description: 'D4 SACA, the model of the paper: frozen configuration of the preregistered stage 2, 5 retrains per subset.'
+experiment_id: exp_B16
+concerns:
+- R1.3
+- R1.31
+- R0.11
+- R2.16
+- R1.39
+- R2.17
+family: r3_D4
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_B16_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm: {}
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: evaluate_test (purpose final) after selection_frozen.json
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_B16
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_03/exp_B16
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}

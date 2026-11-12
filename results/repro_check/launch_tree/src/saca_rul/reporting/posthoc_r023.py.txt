@@ -1,0 +1,233 @@
+"""Port of experiments/final/posthoc_R0.23_nosmooth_c/run_padding_nosmooth.py (sha256 b9f259db...). Changes: package
+imports, output folder is an argument, no test-log row. Reads only saved prediction files (open guard active).
+
+R0.23 + no-smoothing option (c): ONE combined post-freeze analysis_posthoc (RULES 23). Descriptive only.
+
+Reads ONLY saved test prediction files (no model, no test_FD / RUL_FD file; open-guard active):
+- D4 with EMA = exp_B16 (final_rows.json row d4, sha verified), seeds 0-4;
+- D4 without smoothing = exp_V1/nosmooth (sha256 verified against exp_V1/metrics.json test_preds_sha256), seeds 0-4.
+Padding rule (preprocess.testing_windows, L = 50 for D4, checked in exp_B16 and exp_V1 train_meta): an engine with
+T < L observed cycles is right-padded by repeating its last row and its window ends at cycle T, so cycle_end = T < L;
+for T = L the window is rows 1..L (cycle_end = L); for T > L the window ends one cycle before the last observation
+(cycle_end = T − 1 ≥ L). Hence padded  <=>  cycle_end < L, and T = cycle_end for padded engines.
+Part A (R0.23): per subset, padded count and pad length; D4 test RMSE/Score on all, unpadded and padded engines.
+Part B (option c): no-smoothing gap (none − EMA) split by padded vs unpadded test engines, paired by split seed, plus
+the share of the MSE increase that comes from padded engines. Never used for any selection.
+"""
+import builtins
+import json
+import os
+import re
+import sys
+
+import numpy as np
+import pandas as pd
+from scipy import stats as st
+
+from . import posthoc_common as PC
+
+HERE = "."  # output folder, set by main()
+
+EXP_ID = "final_R0.23_padding_nosmooth_c"
+V1 = os.path.join(PC.WS, "experiments", "round_04", "exp_V1")
+B16 = os.path.join(PC.WS, "experiments", "round_03", "exp_B16")
+L = 50
+_open = builtins.open
+_BLOCK = re.compile(r"(RUL_FD\d|test_FD\d)", re.IGNORECASE)
+
+
+def guarded_open(file, *a, **k):
+    if isinstance(file, (str, bytes)) or hasattr(file, "__fspath__"):
+        p = os.fsdecode(file) if not isinstance(file, str) else file
+        if _BLOCK.search(p):
+            raise RuntimeError(f"blocked: {p}")
+    return _open(file, *a, **k)
+
+
+def score_rows(d):
+    return np.where(d < 0, np.expm1(-d / 13.0), np.expm1(d / 10.0))
+
+
+def rmse(d):
+    return float(np.sqrt(np.mean(d ** 2))) if len(d) else None
+
+
+def tci(v):
+    v = np.asarray(v, float)
+    h = st.t.ppf(0.975, len(v) - 1) * v.std(ddof=1) / np.sqrt(len(v))
+    return [float(v.mean() - h), float(v.mean() + h)]
+
+
+def ms(v):
+    v = np.asarray(v, float)
+    return [float(v.mean()), float(v.std(ddof=1))]
+
+
+def _main():
+    builtins.open = guarded_open
+    PC.refuse_if_logged(EXP_ID)
+    rows, fr = PC.load_final_rows()
+    v1m = json.load(open(os.path.join(V1, "metrics.json"), encoding="utf-8"))
+    files = {PC.rel(PC.FINAL_ROWS): PC.FINAL_ROWS_SHA, PC.rel(__file__): PC.sha256(__file__),
+             PC.rel(os.path.join(V1, "metrics.json")): PC.sha256(os.path.join(V1, "metrics.json"))}
+    ema, non = {}, {}
+    Ls = set()
+    for sub in PC.SUBS:
+        for s, p, h in PC.pred_files(rows, "d4", sub):
+            files[PC.rel(p)] = h
+            ema[(sub, s)] = pd.read_csv(p)
+        for r in v1m["per_subset"][sub]["nosmooth_per_seed"]:
+            p = os.path.join(PC.WS, r["test_preds_file"])
+            h = PC.sha256(p)
+            assert h == r["test_preds_sha256"], p
+            files[PC.rel(p)] = h
+            non[(sub, int(r["seed"]))] = pd.read_csv(p)
+        for s in PC.SEEDS:
+            for d in (os.path.join(B16, "runs", f"{sub}_seed{s}"), os.path.join(V1, "nosmooth", "runs", f"{sub}_seed{s}")):
+                Ls.add(json.load(open(os.path.join(d, "train_meta.json"), encoding="utf-8"))["L"])
+    assert Ls == {L}, Ls
+    inputs_sha = PC.write_inputs(os.path.join(HERE, "inputs_sha256.json"), files)
+    n_all = sum(len(ema[(s, 0)]) for s in PC.SUBS)
+    logrow = PC.append_posthoc(EXP_ID, "FD001-FD004",
+                               "R0.23 + no-smoothing (c), one combined read (RULES 23): saved D4 test prediction files "
+                               "exp_B16 (EMA) and exp_V1 (none), padded = cycle_end < L 50; padding count/RMSE effect and "
+                               f"none-EMA gap split padded/unpadded; inputs posthoc_R0.23_nosmooth_c/inputs_sha256.json "
+                               f"{inputs_sha}; descriptive, no selection", n_all, __file__)
+    res = {"experiment_id": EXP_ID, "kind": "analysis_posthoc", "log_row": logrow, "inputs_sha256_file": inputs_sha,
+           "L": L, "padding_rule": "padded <=> cycle_end < L (T < L); pad rows = L − T", "per_subset": {}, "pooled": {}}
+    pool = {"gap_all": [], "gap_pad": [], "gap_unpad": []}
+    for sub in PC.SUBS:
+        ref = ema[(sub, 0)]
+        for s in PC.SEEDS:
+            for df in (ema[(sub, s)], non[(sub, s)]):
+                assert np.array_equal(df.engine_id.to_numpy(), ref.engine_id.to_numpy())
+                assert np.array_equal(df.cycle_end.to_numpy(), ref.cycle_end.to_numpy())
+                assert np.allclose(df.y_true_capped.to_numpy(), ref.y_true_capped.to_numpy())
+        ce = ref.cycle_end.to_numpy()
+        y = ref.y_true_capped.to_numpy()
+        pad = ce < L
+        padlen = (L - ce[pad])
+        A = {"n_engines": int(len(ce)), "n_padded": int(pad.sum()), "n_T_lt_30": int((ce < 30).sum()),
+             "n_T_lt_40": int((ce < 40).sum()), "padded_engine_ids": ref.engine_id[pad].astype(int).tolist(),
+             "pad_rows": {"min": int(padlen.min()) if pad.any() else None,
+                          "median": float(np.median(padlen)) if pad.any() else None,
+                          "max": int(padlen.max()) if pad.any() else None,
+                          "mean_fraction_of_window": float(padlen.mean() / L) if pad.any() else None},
+             "true_rul_capped_mean": {"padded": float(y[pad].mean()) if pad.any() else None,
+                                      "unpadded": float(y[~pad].mean())},
+             "share_padded_at_cap_125": float((y[pad] >= 125).mean()) if pad.any() else None}
+        per = {"ema": {}, "none": {}}
+        for arm, src in (("ema", ema), ("none", non)):
+            v = {"RMSE_all": [], "RMSE_unpadded": [], "RMSE_padded": [], "delta_excl_minus_all": [],
+                 "Score_all": [], "Score_padded": [], "Score_share_padded": [], "mean_err_padded": [],
+                 "mean_err_unpadded": []}
+            for s in PC.SEEDS:
+                d = src[(sub, s)].y_pred.to_numpy() - y
+                sc = score_rows(d)
+                v["RMSE_all"].append(rmse(d))
+                v["RMSE_unpadded"].append(rmse(d[~pad]))
+                v["RMSE_padded"].append(rmse(d[pad]) if pad.any() else np.nan)
+                v["delta_excl_minus_all"].append(rmse(d[~pad]) - rmse(d))
+                v["Score_all"].append(float(sc.sum()))
+                v["Score_padded"].append(float(sc[pad].sum()))
+                v["Score_share_padded"].append(float(sc[pad].sum() / sc.sum()))
+                v["mean_err_padded"].append(float(d[pad].mean()) if pad.any() else np.nan)
+                v["mean_err_unpadded"].append(float(d[~pad].mean()))
+            dsa = np.mean([src[(sub, s)].y_pred.to_numpy() for s in PC.SEEDS], 0) - y
+            per[arm] = {"per_seed": v, "mean_std": {k: ms(x) for k, x in v.items()},
+                        "seedavg": {"RMSE_all": rmse(dsa), "RMSE_unpadded": rmse(dsa[~pad]),
+                                    "RMSE_padded": rmse(dsa[pad]) if pad.any() else None}}
+        B = {}
+        for part, key in (("all", "RMSE_all"), ("padded", "RMSE_padded"), ("unpadded", "RMSE_unpadded")):
+            g = np.array(per["none"]["per_seed"][key]) - np.array(per["ema"]["per_seed"][key])
+            B[f"gap_none_minus_ema_RMSE_{part}"] = {"per_seed": g.tolist(), "mean": float(g.mean()), "t95": tci(g),
+                                                    "n_seeds_none_worse": int((g > 0).sum())}
+        # MSE decomposition: dMSE_all = (n_p/n) dMSE_p + (n_u/n) dMSE_u
+        sh = []
+        for s in PC.SEEDS:
+            de, dn = ema[(sub, s)].y_pred.to_numpy() - y, non[(sub, s)].y_pred.to_numpy() - y
+            dsq = dn ** 2 - de ** 2
+            sh.append(float(dsq[pad].sum() / dsq.sum()) if dsq.sum() != 0 else np.nan)
+        B["share_of_MSE_increase_from_padded"] = {"per_seed": sh, "mean_std": ms(sh),
+                                                  "padded_engine_fraction": float(pad.mean())}
+        pool["gap_all"] += B["gap_none_minus_ema_RMSE_all"]["per_seed"]
+        pool["gap_pad"] += B["gap_none_minus_ema_RMSE_padded"]["per_seed"]
+        pool["gap_unpad"] += B["gap_none_minus_ema_RMSE_unpadded"]["per_seed"]
+        res["per_subset"][sub] = {"A_padding": A, "A_B_metrics": per, "B_nosmooth_gap": B}
+    for k, v in pool.items():
+        v = np.array(v)
+        w = st.wilcoxon(v, method="exact")
+        res["pooled"][k] = {"n": int(len(v)), "mean": float(v.mean()), "median": float(np.median(v)),
+                            "n_none_worse": int((v > 0).sum()), "wilcoxon_exact_p_descriptive": float(w.pvalue)}
+    dpu = np.array(pool["gap_pad"]) - np.array(pool["gap_unpad"])
+    res["pooled"]["gap_padded_minus_gap_unpadded"] = {"n": 20, "mean": float(dpu.mean()), "n_positive": int((dpu > 0).sum()),
+                                                      "wilcoxon_exact_p_descriptive": float(st.wilcoxon(dpu, method="exact").pvalue)}
+    with open(os.path.join(HERE, "padding_nosmooth_results.json"), "w", encoding="utf-8") as f:
+        json.dump(res, f, indent=1, ensure_ascii=False, default=float)
+    f2 = lambda x: f"{x[0]:.2f} ± {x[1]:.2f}"   # noqa: E731
+    ci = lambda b: f"{b['mean']:+.2f} [{b['t95'][0]:+.2f}, {b['t95'][1]:+.2f}] ({b['n_seeds_none_worse']}/5)"  # noqa: E731
+    M = ["# R0.23 + no-smoothing (c): test-window padding and the no-smoothing gap (D4, L = 50; analysis_posthoc)", "",
+         "Saved test prediction files only (exp_B16 = D4 with causal EMA; exp_V1 = D4 without smoothing), 5 split seeds. "
+         "Padded engine: fewer than L = 50 observed test cycles (cycle_end < 50); its window is the T observed rows plus "
+         "L − T copies of the last row. Unpadded windows end one cycle before the last observation (T > L). "
+         "Descriptive only; selects nothing.", "",
+         "## A. Padding count and effect on D4 (EMA) test RMSE", "",
+         "| Subset | engines | padded (T < 50) | T < 40 | T < 30 | pad rows median [min, max] | true RUL mean padded / unpadded | RMSE all | RMSE unpadded | RMSE padded | Δ excl. padded − all | Score share of padded |",
+         "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for sub in PC.SUBS:
+        A = res["per_subset"][sub]["A_padding"]
+        e = res["per_subset"][sub]["A_B_metrics"]["ema"]["mean_std"]
+        pr = A["pad_rows"]
+        M.append(f"| {sub} | {A['n_engines']} | {A['n_padded']} | {A['n_T_lt_40']} | {A['n_T_lt_30']} | "
+                 f"{pr['median']:.0f} [{pr['min']}, {pr['max']}] | {A['true_rul_capped_mean']['padded']:.1f} / "
+                 f"{A['true_rul_capped_mean']['unpadded']:.1f} | {f2(e['RMSE_all'])} | {f2(e['RMSE_unpadded'])} | "
+                 f"{f2(e['RMSE_padded'])} | {e['delta_excl_minus_all'][0]:+.2f} ± {e['delta_excl_minus_all'][1]:.2f} | "
+                 f"{100 * e['Score_share_padded'][0]:.1f}% |")
+    M += ["", "## B. No-smoothing gap (none − EMA, test RMSE) split by padded vs unpadded engines", "",
+          "Paired by split seed; mean [95% t CI over 5 seeds] (seeds with none worse). Share of MSE increase = "
+          "Σ_padded (e_none² − e_ema²) / Σ_all (e_none² − e_ema²).", "",
+          "| Subset | RMSE padded EMA → none | RMSE unpadded EMA → none | gap all | gap padded | gap unpadded | share of MSE increase from padded (padded fraction of engines) |",
+          "|---|---|---|---|---|---|---|"]
+    for sub in PC.SUBS:
+        P_ = res["per_subset"][sub]
+        e, n = P_["A_B_metrics"]["ema"]["mean_std"], P_["A_B_metrics"]["none"]["mean_std"]
+        B = P_["B_nosmooth_gap"]
+        shm = B["share_of_MSE_increase_from_padded"]
+        M.append(f"| {sub} | {f2(e['RMSE_padded'])} → {f2(n['RMSE_padded'])} | {f2(e['RMSE_unpadded'])} → "
+                 f"{f2(n['RMSE_unpadded'])} | {ci(B['gap_none_minus_ema_RMSE_all'])} | "
+                 f"{ci(B['gap_none_minus_ema_RMSE_padded'])} | {ci(B['gap_none_minus_ema_RMSE_unpadded'])} | "
+                 f"{100 * shm['mean_std'][0]:.0f}% ± {100 * shm['mean_std'][1]:.0f}% ({100 * shm['padded_engine_fraction']:.1f}%) |")
+    M += ["", "Pooled over 20 (subset, seed) pairs (exact Wilcoxon, descriptive):", ""]
+    for k, v in res["pooled"].items():
+        M.append(f"- {k}: mean {v['mean']:+.2f}, p {v['wilcoxon_exact_p_descriptive']:.2g}, "
+                 + (f"none worse {v['n_none_worse']}/20" if "n_none_worse" in v else f"positive {v['n_positive']}/20"))
+    M += ["", "Shares can exceed 100% or be negative when the unpadded engines improve or the total change is small; "
+          "per-seed values are in the JSON. This is a descriptive split, not a tested mechanism (paper_plan D33)."]
+    with open(os.path.join(HERE, "padding_nosmooth_results.md"), "w", encoding="utf-8") as f:
+        f.write("\n".join(M) + "\n")
+    print("done")
+
+
+def main(out_dir: str) -> None:
+    """Regenerate the outputs into ``out_dir`` (inert test-log helpers; see posthoc_common)."""
+    global HERE
+    HERE = os.path.abspath(out_dir)
+    os.makedirs(HERE, exist_ok=True)
+    saved = builtins.open
+    try:
+        _main()
+    finally:
+        builtins.open = saved
+
+
+def cli(argv: list[str] | None = None) -> None:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out-dir", required=True, help="folder for the regenerated outputs (never the frozen folder)")
+    a = ap.parse_args(argv)
+    main(a.out_dir)
+
+
+if __name__ == "__main__":
+    cli()

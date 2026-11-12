@@ -1,0 +1,177 @@
+{
+ "experiment_id": "exp_B10",
+ "model": "patchtst",
+ "per_subset": {
+  "FD002": {
+   "trial_id": "2:1",
+   "value": 14.004644335090507,
+   "params": {
+    "L": 50,
+    "batch_size": 64,
+    "d_ff": 128,
+    "d_model": 64,
+    "dropout": 0.0705237305687562,
+    "e_layers": 2,
+    "lr": 8.62134389983346e-05,
+    "n_heads": 4,
+    "patch_len": 8,
+    "r": 1.0,
+    "revin": false,
+    "weight_decay": 4.029300695576913e-06
+   },
+   "n_params": 68931,
+   "n_completed_pooled": 11,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 3,
+     "FAIL": 1
+    },
+    "1": {
+     "COMPLETE": 4,
+     "FAIL": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "FAIL": 0
+    }
+   },
+   "study_best_values": [
+    14.027399167801072,
+    14.26833318160786,
+    14.004644335090507
+   ],
+   "study_best_spread": 0.26368884651735236,
+   "pooled_trials_sha256": "8ff8ebfff298ccafdf3d7c2f376cfa6d8a74f23871cc5905b80ddf119b20763f",
+   "frozen_at": "2026-10-21T19:22:04",
+   "test_data_used": false
+  },
+  "FD003": {
+   "trial_id": "2:1",
+   "value": 10.70334017077372,
+   "params": {
+    "L": 50,
+    "batch_size": 64,
+    "d_ff": 128,
+    "d_model": 64,
+    "dropout": 0.0705237305687562,
+    "e_layers": 2,
+    "lr": 8.62134389983346e-05,
+    "n_heads": 4,
+    "patch_len": 8,
+    "r": 1.0,
+    "revin": false,
+    "weight_decay": 4.029300695576913e-06
+   },
+   "n_params": 68611,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4
+    },
+    "1": {
+     "COMPLETE": 4
+    },
+    "2": {
+     "COMPLETE": 4
+    }
+   },
+   "study_best_values": [
+    11.063865235621034,
+    12.045876121391856,
+    10.70334017077372
+   ],
+   "study_best_spread": 1.342535950618137,
+   "pooled_trials_sha256": "5c09ef59f3ec74ea3d3489c03149c837df0c60116ee480c0075cc42b83590c58",
+   "frozen_at": "2026-10-21T20:13:08",
+   "test_data_used": false
+  },
+  "FD001": {
+   "trial_id": "2:1",
+   "value": 11.745328321536544,
+   "params": {
+    "L": 50,
+    "batch_size": 64,
+    "d_ff": 128,
+    "d_model": 64,
+    "dropout": 0.0705237305687562,
+    "e_layers": 2,
+    "lr": 8.62134389983346e-05,
+    "n_heads": 4,
+    "patch_len": 8,
+    "r": 1.0,
+    "revin": false,
+    "weight_decay": 4.029300695576913e-06
+   },
+   "n_params": 68739,
+   "n_completed_pooled": 10,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 2,
+     "FAIL": 1
+    },
+    "1": {
+     "COMPLETE": 4,
+     "FAIL": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "FAIL": 0
+    }
+   },
+   "study_best_values": [
+    15.180530232374007,
+    12.382496016879852,
+    11.745328321536544
+   ],
+   "study_best_spread": 3.4352019108374634,
+   "pooled_trials_sha256": "ed50c98704de74350fb86607b9eb07463df5cf1eb26a5ed8bf7565499fd8ca51",
+   "frozen_at": "2026-10-21T20:49:00",
+   "test_data_used": false
+  },
+  "FD004": {
+   "trial_id": "2:1",
+   "value": 13.602613202138375,
+   "params": {
+    "L": 50,
+    "batch_size": 64,
+    "d_ff": 128,
+    "d_model": 64,
+    "dropout": 0.0705237305687562,
+    "e_layers": 2,
+    "lr": 8.62134389983346e-05,
+    "n_heads": 4,
+    "patch_len": 8,
+    "r": 1.0,
+    "revin": false,
+    "weight_decay": 4.029300695576913e-06
+   },
+   "n_params": 68867,
+   "n_completed_pooled": 7,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 2,
+     "FAIL": 1
+    },
+    "1": {
+     "COMPLETE": 3,
+     "FAIL": 1
+    },
+    "2": {
+     "COMPLETE": 2,
+     "FAIL": 1
+    }
+   },
+   "study_best_values": [
+    16.65446319695481,
+    13.985524982755768,
+    13.602613202138375
+   ],
+   "study_best_spread": 3.051849994816436,
+   "pooled_trials_sha256": "6952634380d0da29a81b16da4c672a562ff1ee8133dfa36386869049d09b10b1",
+   "frozen_at": "2026-10-21T21:52:26",
+   "test_data_used": false
+  }
+ },
+ "rule": "argmin over the pooled completed trials of the 3 studies; exact ties -> fewer parameters",
+ "protocol_sha256": "d41d8bd82494264ffcd6aa819947a12408a969a2635c400b4cf0a60a0d6e01e7"
+}

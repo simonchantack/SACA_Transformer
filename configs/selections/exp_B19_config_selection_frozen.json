@@ -1,0 +1,202 @@
+{
+ "experiment_id": "exp_B19",
+ "model": "dualdim",
+ "per_subset": {
+  "FD002": {
+   "trial_id": "0:1",
+   "value": 14.381589908709769,
+   "params": {
+    "L": 50,
+    "batch_size": 128,
+    "d_ff": 256,
+    "d_model": 128,
+    "dropout_c": 0.0597969480635801,
+    "dropout_t": 0.2348158948495754,
+    "head_hidden": 128,
+    "lr": 5.338528208876637e-05,
+    "n_heads": 4,
+    "n_layers_c": 3,
+    "n_layers_t": 3,
+    "patch_c": 5,
+    "patch_t": 15,
+    "r_t": 1.0,
+    "stride_c": 3,
+    "weight_decay": 5.135589606500225e-05
+   },
+   "n_params": 815105,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4,
+     "PRUNED": 1
+    },
+    "1": {
+     "COMPLETE": 4,
+     "PRUNED": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "PRUNED": 2
+    }
+   },
+   "study_best_values": [
+    14.381589908709769,
+    16.557001455582547,
+    15.07447894340546
+   ],
+   "study_best_spread": 2.1754115468727786,
+   "pooled_trials_sha256": "c70a04948d1c8f37a17d4a7abe1d092e198da95dd2f38c027c9a214aaa4caf4b",
+   "frozen_at": "2026-10-21T10:28:52",
+   "test_data_used": false
+  },
+  "FD003": {
+   "trial_id": "0:1",
+   "value": 11.720136139507776,
+   "params": {
+    "L": 50,
+    "batch_size": 128,
+    "d_ff": 256,
+    "d_model": 128,
+    "dropout_c": 0.0597969480635801,
+    "dropout_t": 0.2348158948495754,
+    "head_hidden": 128,
+    "lr": 5.338528208876637e-05,
+    "n_heads": 4,
+    "n_layers_c": 3,
+    "n_layers_t": 3,
+    "patch_c": 5,
+    "patch_t": 15,
+    "r_t": 1.0,
+    "stride_c": 3,
+    "weight_decay": 5.135589606500225e-05
+   },
+   "n_params": 815105,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4,
+     "PRUNED": 1
+    },
+    "1": {
+     "COMPLETE": 4,
+     "PRUNED": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "PRUNED": 2
+    }
+   },
+   "study_best_values": [
+    11.720136139507776,
+    13.52125807562829,
+    12.208658462086628
+   ],
+   "study_best_spread": 1.8011219361205146,
+   "pooled_trials_sha256": "2c42829fcaa0fadc25662d1840ab10369c6bd1c751295b9608dad6f41af0ed89",
+   "frozen_at": "2026-10-21T12:34:23",
+   "test_data_used": false
+  },
+  "FD001": {
+   "trial_id": "2:1",
+   "value": 12.585262143915791,
+   "params": {
+    "L": 40,
+    "batch_size": 256,
+    "d_ff": 64,
+    "d_model": 32,
+    "dropout_c": 0.2341867640717782,
+    "dropout_t": 0.2580042249086252,
+    "head_hidden": 256,
+    "lr": 0.0008081360003631,
+    "n_heads": 4,
+    "n_layers_c": 2,
+    "n_layers_t": 1,
+    "patch_c": 3,
+    "patch_t": 15,
+    "r_t": 0.5,
+    "stride_c": 2,
+    "weight_decay": 4.2916518186092174e-05
+   },
+   "n_params": 35169,
+   "n_completed_pooled": 12,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4,
+     "PRUNED": 1
+    },
+    "1": {
+     "COMPLETE": 4,
+     "PRUNED": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "PRUNED": 2
+    }
+   },
+   "study_best_values": [
+    12.97615578594066,
+    13.32267694224184,
+    12.585262143915791
+   ],
+   "study_best_spread": 0.7374147983260482,
+   "pooled_trials_sha256": "7be44c61dd2ad1abe8b2bea56f4009caa07a030d5414258735540fcb7bd33842",
+   "frozen_at": "2026-10-21T14:16:11",
+   "test_data_used": false
+  },
+  "FD004": {
+   "trial_id": "0:3",
+   "value": 14.640719741606269,
+   "params": {
+    "L": 50,
+    "batch_size": 64,
+    "d_ff": 256,
+    "d_model": 64,
+    "dropout_c": 0.1399945161195909,
+    "dropout_t": 0.0529285210462504,
+    "head_hidden": 128,
+    "lr": 5.434051375704855e-05,
+    "n_heads": 2,
+    "n_layers_c": 1,
+    "n_layers_t": 4,
+    "patch_c": 9,
+    "patch_t": 5,
+    "r_t": 0.5,
+    "stride_c": 3,
+    "weight_decay": 2.030461577797884e-05
+   },
+   "n_params": 259777,
+   "n_completed_pooled": 11,
+   "counts_by_study": {
+    "0": {
+     "COMPLETE": 4,
+     "FAIL": 0,
+     "PRUNED": 1
+    },
+    "1": {
+     "COMPLETE": 3,
+     "FAIL": 1,
+     "PRUNED": 0
+    },
+    "2": {
+     "COMPLETE": 4,
+     "FAIL": 0,
+     "PRUNED": 2
+    }
+   },
+   "study_best_values": [
+    14.640719741606269,
+    15.085125307272683,
+    14.94212027696908
+   ],
+   "study_best_spread": 0.44440556566641476,
+   "pooled_trials_sha256": "3796584eaf3db8a2a7e584cd0ce07549cd87a119ca4a5ce52fc8ec376b3d2762",
+   "frozen_at": "2026-10-21T17:21:47",
+   "test_data_used": false
+  }
+ },
+ "rule": "argmin over the pooled completed trials of the 3 studies; exact ties -> fewer parameters",
+ "protocol_sha256": "d41d8bd82494264ffcd6aa819947a12408a969a2635c400b4cf0a60a0d6e01e7",
+ "source": "experiments/round_02/exp_B6/config_selection_frozen.json",
+ "source_sha256": "78ee2c193813eba25cbe91d2563a6120a7e3b73f40d5b2915975d4fdd1924113",
+ "note": "theta* (dualdim) frozen exp_B6 configuration per subset, unchanged; exp_B19 = sensor-order permutation retrains (post-result exploratory, validation-only)"
+}

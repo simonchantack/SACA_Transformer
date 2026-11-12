@@ -1,0 +1,20 @@
+[1] Hand-computable examples (e = y_pred - y_true, in cycles)
+    exp(10/13)-1 = 1.1581   exp(10/10)-1 = 1.7183   exp(20/13)-1 = 3.6574   exp(20/10)-1 = 6.3891
+    errors                 code score_nasa  code Final.py       standard  code/standard
+    [-10.0]                        1.7183         1.7183         1.1581          1.484
+    [10.0]                         1.1581         1.1581         1.7183          0.674
+    [-10.0, 10.0]                  2.8764         2.8764         2.8764          1.000
+    [20.0]                         3.6574         3.6574         6.3891          0.572
+    [-20.0]                        6.3891         6.3891         3.6574          1.747
+    [-10.0, 20.0]                  5.3757         5.3757         7.5472          0.712
+    [-30.0, -5.0, 5.0, 30.0]        29.2545        29.2545        29.2545          1.000
+    Per-element: the code charges an early error of -10 as 1.7183 (standard 1.1581) and a late error of
+    +10 as 1.1581 (standard 1.7183): late predictions are penalised less than early ones, the opposite of
+    the metric's intent. For a symmetric pair such as [-10, +10] the two swaps cancel in the sum, so the
+    totals agree only by coincidence; any asymmetric error set differs.
+
+[2] Saved FD001 ITT ensemble on the 100 FD001 test engines (batch 64, as in the code)
+    batch 64  RMSE 11.949 | Score code 228.1 | Score standard 205.6 | early (e<0) 55, late (e>=0) 45 engines
+    batch 1   RMSE 12.297 | Score code 236.1 | Score standard 222.1 | early (e<0) 50, late (e>=0) 50 engines
+
+KEY RESULT: code Score uses /10 for early and /13 for late (swapped); FD001 ITT ensemble Score is 228.1 with the code vs 205.6 with the standard formula (paper reports 228.1).

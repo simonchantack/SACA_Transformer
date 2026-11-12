@@ -1,0 +1,102 @@
+"""CPU shape script for D4 (R1.3, R1.31, R0.11): patch-count formula, numeric tensor shapes and token counts.
+
+It fits the training pipeline on TR of each split seed (training file only, to get the kept-sensor count C), builds
+D4 at the frozen configuration of exp_B16 (and the exp_A12 L = 30 / 40 cells), pushes a zero tensor through it with
+forward hooks, and prints what it measured. No training, no GPU, no test file, no result: the output is structural.
+
+Patch count with PatchTST end padding (submitted Eq. 10 has no padding):
+    N  = floor((L - P) / S) + 1      (submitted code: newest (L - P) mod S cycles dropped)
+    N' = floor((L - P) / S) + 2      (D4: S copies of the last value appended)
+D4 attention operation counts per layer and sample (score entries x d): time stage C (N'+1)^2 d, sensor stage C^2 d.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+import torch
+
+from . import model as M
+from .config import ROOT, load_config, resolve_path
+from .data import DataCache
+from .embeddings import n_patches, n_patches_padded, sensor_ids_from_features
+from .runner import selection_for
+from .search_space import materialize
+
+CELLS = [("exp_B16_d4_main.yaml", "exp_B16 (frozen, L=50)"), ("exp_A12_L40.yaml", "exp_A12 L=40"),
+         ("exp_A12_L30.yaml", "exp_A12 L=30")]
+
+
+def shapes_for(cfg_file: str, subset: str, seed: int, batch: int | None = None) -> dict[str, Any]:
+    cfg = load_config(ROOT / "configs" / cfg_file)
+    ent, _, _ = selection_for(cfg, subset)
+    paths = cfg["paths"]
+    arm = cfg.get("arm") or {}
+    cache = DataCache(subset, seed, paths["data_dir"], paths["splits"])
+    from .search_space import resolve_space  # noqa: F401  (protocol-driven fixed block)
+    from .training import load_protocol
+    pr = load_protocol(cfg["protocol"])
+    mcfg, L, rec = materialize(cfg["family"], ent["params"], cache.C, pr["fixed"].get("dualdim"),
+                               bypass_buildability=bool(arm.get("bypass_buildability")), bypass_L=arm.get("bypass_L"))
+    mc = M.resolve(mcfg, C=cache.C, L=L)
+    model = M.build_model(mc, "D4", sensor_ids_from_features(cache.features)).eval()
+    B = int(batch or rec["batch_size"])
+    P, S, d, C = mc.patch_len_t, mc.stride_t, mc.d_model_t, mc.C
+    Np = n_patches_padded(L, P, S)
+    seen: dict[str, tuple[int, ...]] = {}
+    hooks = []
+
+    def hook(name: str) -> Any:
+        def fn(_m: Any, _i: Any, out: Any) -> None:
+            seen[name] = tuple(out.shape)
+        return fn
+
+    hooks.append(model.patch_embed.register_forward_hook(hook("patch_tokens_p0 (B*C, N', d)")))
+    hooks.append(model.time_layers[0].register_forward_hook(hook("time_stage_out (B*C, N'+1, d)")))
+    hooks.append(model.sensor_layers[0].register_forward_hook(hook("sensor_stage_out (B, C, d)")))
+    hooks.append(model.head.register_forward_hook(hook("head_out (B,)")))
+    with torch.no_grad():
+        y = model(torch.zeros(B, C, L))
+    for h in hooks:
+        h.remove()
+    return {"subset": subset, "seed": seed, "L": L, "C": C, "P_t": P, "S_t": S, "d_model": d, "K_layers": mc.n_layers_t,
+            "heads": mc.n_heads_t, "batch": B, "N_no_padding": n_patches(L, P, S), "N_prime_end_padding": Np,
+            "time_tokens_per_sensor_incl_anchor": Np + 1, "sensor_stage_tokens": C,
+            "input": (B, C, L), "output": tuple(y.shape), "measured_shapes": seen,
+            "attn_ops_time_per_layer_sample": C * (Np + 1) ** 2 * d, "attn_ops_sensor_per_layer_sample": C ** 2 * d,
+            "n_params": M.n_params(model)}
+
+
+def main(argv: list[str] | None = None) -> None:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out-dir", default=str(resolve_path("results/shapes")))
+    ap.add_argument("--seeds", default="0,1,2,3,4")
+    a = ap.parse_args(argv)
+    seeds = [int(s) for s in a.seeds.split(",")]
+    out: list[dict[str, Any]] = []
+    for cfg_file, label in CELLS:
+        for sub in ("FD001", "FD002", "FD003", "FD004"):
+            for s in seeds:
+                r = shapes_for(cfg_file, sub, s)
+                r["cell"] = label
+                out.append(r)
+    od = Path(a.out_dir)
+    od.mkdir(parents=True, exist_ok=True)
+    (od / "d4_shapes.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
+    lines = ["| cell | subset | seed | C | L | P=S | N (no pad) | N' (end pad) | tokens/sensor (N'+1) | d | K | heads | batch | time-stage ops | sensor-stage ops | params |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for r in out:
+        lines.append(f"| {r['cell']} | {r['subset']} | {r['seed']} | {r['C']} | {r['L']} | {r['P_t']}/{r['S_t']} | "
+                     f"{r['N_no_padding']} | {r['N_prime_end_padding']} | {r['time_tokens_per_sensor_incl_anchor']} | "
+                     f"{r['d_model']} | {r['K_layers']} | {r['heads']} | {r['batch']} | "
+                     f"{r['attn_ops_time_per_layer_sample']} | {r['attn_ops_sensor_per_layer_sample']} | {r['n_params']} |")
+    (od / "d4_shapes.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines))
+    for r in out[:1] + [x for x in out if x["cell"].endswith("L=30") and x["subset"] != "FD001"][:1]:
+        print(json.dumps({k: r[k] for k in ("cell", "subset", "input", "measured_shapes", "output")}))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,53 @@
+"""Regression heads. The models are encoder-only; there is no autoregressive decoder.
+
+``FusionHead`` (theta*, D1, D2): concatenate the temporal tokens (B, N, d) and the channel tokens (B, M, d), BatchNorm,
+mean over tokens, then a two-layer MLP. The mean weights the two branches by token count (the temporal share is
+N / (N + M); R1.31).
+
+``SensorIndexedHead`` (D3, D4): flatten the per-sensor vectors in canonical (increasing sensor id) order, then a
+two-layer MLP, so the readout is invariant to the column order of the input (R2.16, R1.39).
+"""
+from __future__ import annotations
+
+from collections.abc import Sequence
+
+import torch
+import torch.nn as nn
+
+from .embeddings import check_sensor_ids
+
+
+class FusionHead(nn.Module):
+    def __init__(self, d_model_t: int, d_model_c: int, head_hidden: int, dropout: float = 0.1,
+                 pooling: str = "mean") -> None:
+        super().__init__()
+        self.proj_t: nn.Module = nn.Identity() if d_model_t == d_model_c else nn.Linear(d_model_t, d_model_c)
+        self.d_model = d_model_c
+        self.norm = nn.BatchNorm1d(self.d_model)
+        assert pooling in ("mean", "cls")
+        self.pooling = pooling
+        self.mlp = nn.Sequential(nn.Linear(self.d_model, head_hidden), nn.GELU(), nn.Dropout(dropout),
+                                 nn.Linear(head_hidden, 1))
+
+    def forward(self, temporal_out: torch.Tensor, channel_out: torch.Tensor) -> torch.Tensor:
+        t = self.proj_t(temporal_out)
+        p = torch.cat([t, channel_out], dim=1)  # (B, N + M, d)
+        p = self.norm(p.permute(0, 2, 1)).permute(0, 2, 1)
+        pooled = p.mean(dim=1) if self.pooling == "mean" else p[:, 0, :]
+        return self.mlp(pooled)
+
+
+class SensorIndexedHead(nn.Module):
+    """y = w2^T Drop(GELU(W1 vec(f_(1..C)) + b1)) + b2 with the sensors in increasing id order."""
+
+    def __init__(self, C: int, sensor_ids: Sequence[int], d_model: int, head_hidden: int, dropout: float) -> None:
+        super().__init__()
+        sids = check_sensor_ids(sensor_ids, C)
+        order = sorted(range(C), key=lambda i: sids[i])
+        self.register_buffer("canon", torch.tensor(order, dtype=torch.long), persistent=False)
+        self.mlp = nn.Sequential(nn.Linear(C * d_model, head_hidden), nn.GELU(), nn.Dropout(dropout),
+                                 nn.Linear(head_hidden, 1))
+
+    def forward(self, f: torch.Tensor) -> torch.Tensor:
+        f = f.index_select(1, self.canon)
+        return self.mlp(f.reshape(f.shape[0], -1)).squeeze(-1)

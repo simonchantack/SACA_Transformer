@@ -1,0 +1,32 @@
+{
+ "exp_B16_d4_main": {
+  "preds_val_sha256": "254a95c17810e2895276d68d5775ebe73e9165cd86d200e5e1c35e607d4e2d68",
+  "state_dict_sha256": "28faf4510388bc383baaab334b65c696ce33e6b3a305ca3751316d93543e7f0d",
+  "best_epoch": 9
+ },
+ "exp_B6_theta_star": {
+  "preds_val_sha256": "54f57e8fd40a39c24d7a7b19f44d192c0ae9067ef80834a095bd89cb7f6b81db",
+  "state_dict_sha256": "7863191017310dcdf1e7e30237619624da0b6ffb7bb7d4069b850f90426058c4",
+  "best_epoch": 14
+ },
+ "exp_B10_patchtst": {
+  "preds_val_sha256": "e9703e23caae44f3b9fe995e7132fda01a6029c0436bc1fcd003097c6b8a2b17",
+  "state_dict_sha256": "a5e6090607b13a9f431aa2d4d97bbedfaff1e5c0ba906a029e82f629e6170838",
+  "best_epoch": 49
+ },
+ "exp_B11_itransformer": {
+  "preds_val_sha256": "c90ea01e04be409eb80f2d0f3987f7d23c09b0c1cb7560f2ebe4c073ef2f931e",
+  "state_dict_sha256": "6f3a4a0dcfb0300e0c854aa28ce7bd229ec867ff13facabbd8d1cab01ff813ec",
+  "best_epoch": 39
+ },
+ "exp_B12_crossformer": {
+  "preds_val_sha256": "bcbe856ff113d5a9ac8051f7ad8173ff6d1950c3dfbb95617bb33c50d2739af5",
+  "state_dict_sha256": "325dd840e928413bdc79d5cac2879deaf893f2055d24fef98e0c27f41f2e46fd",
+  "best_epoch": 9
+ },
+ "exp_V2_lstm": {
+  "preds_val_sha256": "a8ffa251156d799c8b3875bfabe571315d10f42f7b576959f956538c3dbf27d0",
+  "state_dict_sha256": "eb12c2a504edda40b5e4894aab9fb719a047b1e772ba3dd84b04d450aa3d48aa",
+  "best_epoch": 26
+ }
+}

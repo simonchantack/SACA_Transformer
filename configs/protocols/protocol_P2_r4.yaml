@@ -1,0 +1,139 @@
+# Protocol P2 (round 02): ONE file for every model (our base exp_B6, PatchTST exp_B10, iTransformer exp_B11,
+# Crossformer exp_B12). Source: research/round_02.md G.5, H.3, 7.3-7.4. Owner: eswa-experimenter-validation.
+# Concerns: R0.3, R1.27, R2.4, R2.7, R1.36, R2.2.
+# STATUS: FROZEN 2026-10-21 (Simon, RULES section 14: option D-prime). Changes from the draft (made before the first
+# GPU trial): budget_option Dp (batch {64,128,256}, 4 trials/study, 1 process); oom_rule; eval block; study timeout
+# basis (exp_A4 costs). The search spaces, objective, recipe and selection rule are unchanged.
+# sha256 recorded in every tune.log / train.log. No edits after the first trial.
+
+budget_option: "Dp"         # Simon 2026-10-21 (RULES 14): D-prime, round-2 cap about 26 GPU-h, no GPU sharing
+options:
+  A: {trials_per_study: 4, batch_choices: [32, 64, 128],  workers_per_job: 1}   # default, no rule change
+  B: {trials_per_study: 4, batch_choices: [64, 128, 256], workers_per_job: 2}   # needs 7.3 (a)+(b) approval + A4 gates
+  C: {trials_per_study: 3, batch_choices: [64, 128, 256], workers_per_job: 2}   # 9 trials; top-9 instead of top-10
+  D: {trials_per_study: 4, batch_choices: [32, 64, 128],  workers_per_job: 1}   # cap raised to ~30 GPU-h serial
+  Dp: {trials_per_study: 4, batch_choices: [64, 128, 256], workers_per_job: 1}  # SELECTED: D-prime (RULES 14)
+# workers_per_job 2 = two tune.py processes (different studies) under ONE gpu.lock holder (run_p2_queue.py).
+# Allowed only if exp_A4 shows >= 1.5x throughput AND a bitwise-identical 200-step run with a neighbour.
+
+study_seeds: [0, 1, 2]
+trial_seed_rule: "1000 * study_seed + trial.number"
+sampler: {name: RandomSampler, seed: study_seed}      # Bergstra and Bengio 2012; no TPE (F4)
+pruner: none                                           # early stopping (patience 15) is the only early termination
+max_draws_per_study: 200                               # rejected (infeasible) draws cost no GPU and do not count
+study_timeout_factor: 3.0                              # x the exp_A4 large-batch study estimate (4 x trial_gpu_h
+                                                       # 'large', exp_A4/metrics.json); same factor for every model.
+                                                       # Raised from 1.5 (pre-probe basis) because a timeout cuts the
+                                                       # equal trial budget; the round cap is enforced by the queue.
+oom_rule:                                              # Simon 2026-10-21 (RULES 14); identical for every model
+  memory_fraction: 0.90                                # torch.cuda.set_per_process_memory_fraction: allocations above
+                                                       # 0.90 x device memory raise OOM (no silent WDDM spill)
+  action: "configuration invalid; trial marked PRUNED with user_attr rejected_oom; redrawn; not counted in K"
+eval:
+  batch_size: 256                                      # validation predictions in trials and retrains; on OOM the
+  on_oom: halve                                        # batch is halved (predictions are batch-invariant, R0.2 b)
+
+data:
+  splits: data_splits.json                             # sha256 88840135f2020050a989230ea00da9428d0d1d81dd84c2c96370876144940eab
+  tuning_split_seed: 0                                 # from data_splits.json (tuning_split_seed)
+  retrain_seeds: [0, 1, 2, 3, 4]                       # compute.yaml seeds_final
+  pipeline: exp_B1 preprocess.py (TR-only fit; legacy_corr false; kmeans random_state = split seed)
+  smoothing: ema
+  ema_alpha: 0.24723
+  rul_cap: 125
+
+objective:
+  metric: val_RMSE_support                             # RMSE over VA windows on the common support
+  L_max: 50
+  support_min_label_cycle: 51                          # label cycle >= 51 <=> window end cycle >= 50 (F2)
+  direction: minimize
+  selection: "argmin over the pooled completed trials of the 3 studies; exact ties -> fewer parameters"
+
+recipe:                                                # identical for every model; not tuned
+  loss: mse
+  optimizer: adamw
+  grad_clip: 1.0
+  scheduler: none
+  noise_std: 0.0
+  max_epochs: 150
+  patience: 15
+  early_stop_metric: val_rmse_support
+
+shared_space:                                          # order matters (RandomSampler draw order)
+  L: {type: categorical, choices: [30, 40, 50]}
+  lr: {type: float, low: 1.0e-5, high: 1.0e-3, log: true}
+  weight_decay: {type: float, low: 1.0e-6, high: 1.0e-3, log: true}
+  batch_size: {type: categorical, choices: OPTION}     # filled from options[budget_option].batch_choices
+
+spaces:
+  dualdim:                                             # the new Table 5 (R1.36); research G.5
+    d_model: {type: categorical, choices: [32, 64, 128]}
+    n_heads: {type: categorical, choices: [2, 4, 8]}
+    n_layers_t: {type: categorical, choices: [1, 2, 3, 4]}
+    n_layers_c: {type: categorical, choices: [1, 2, 3, 4]}
+    d_ff: {type: categorical, choices: [64, 128, 256]}
+    head_hidden: {type: categorical, choices: [64, 128, 256]}
+    dropout_t: {type: float, low: 0.05, high: 0.30}
+    dropout_c: {type: float, low: 0.05, high: 0.30}
+    patch_t: {type: categorical, choices: [5, 10, 15, 20]}
+    r_t: {type: categorical, choices: [0.5, 1.0]}       # stride_t = max(1, round_half_up(r_t * patch_t))
+    patch_c: {type: categorical, choices: [3, 5, 7, 9, 11]}   # <= C, else rejected
+    stride_c: {type: categorical, choices: [1, 2, 3, 4, 5]}   # <= patch_c, else rejected
+  patchtst:                                            # research H.3 (official @204c21e, regression head)
+    patch_len: {type: categorical, choices: [4, 8, 12, 16]}
+    r: {type: categorical, choices: [0.5, 1.0]}         # stride = r * patch_len; num_patch >= 2
+    d_model: {type: categorical, choices: [16, 64, 128]}
+    n_heads: {type: categorical, choices: [4, 8]}
+    e_layers: {type: categorical, choices: [1, 2, 3]}
+    d_ff: {type: categorical, choices: [128, 256]}
+    dropout: {type: float, low: 0.05, high: 0.30}       # = attention dropout = head dropout
+    revin: {type: categorical, choices: [true, false]}
+  itransformer:                                        # research H.3 (official @c2426e6 + TSLib head)
+    d_model: {type: categorical, choices: [64, 128, 256, 512]}
+    m: {type: categorical, choices: [1, 2]}             # d_ff = m * d_model
+    e_layers: {type: categorical, choices: [1, 2, 3, 4]}
+    n_heads: {type: categorical, choices: [4, 8]}
+    dropout: {type: float, low: 0.05, high: 0.30}
+    use_norm: {type: categorical, choices: [true, false]}
+  crossformer:                                         # research H.3 (official @c10c8ea encoder + flatten head)
+    seg_len: {type: categorical, choices: [4, 5, 8, 10]}
+    win_size: {type: categorical, choices: [2]}          # fixed at the official default; kept as a draw so the
+                                                       # RandomSampler stream matches exp_A4 search_space.py
+    e_layers: {type: categorical, choices: [1, 2, 3]}
+    factor: {type: categorical, choices: [5, 10]}
+    d_model: {type: categorical, choices: [64, 128, 256]}
+    n_heads: {type: categorical, choices: [2, 4, 8]}
+    dropout: {type: float, low: 0.05, high: 0.30}
+  lstm:                                               # round 4 (R1.19, RULES 22): adapter experiments/round_04/r4code/adapters/baselines.py
+    hidden: {type: categorical, choices: [32, 64, 128]}
+    layers: {type: categorical, choices: [1, 2, 3]}   # nn.LSTM num_layers; inter-layer dropout = dropout if layers > 1
+    dropout: {type: float, low: 0.0, high: 0.30}       # also the Dropout before the Linear head
+
+fixed:                                                 # not searched
+  dualdim: {pooling: mean, use_bn_temporal: true, use_bn_channel: true, fusion_norm: batchnorm,
+            probsparse_eval_seed: 0, probsparse_exact_when_full: true}   # ProbSparse c = 5 in attn.py
+  patchtst: {}
+  itransformer: {}
+  crossformer: {}
+
+adapters:
+  baselines_module: experiments/round_02/exp_A4/code/baselines.py   # build_baseline(name, cfg, C, L); arch delivers
+
+dry_run:                                               # CPU smoke of tune.py; never reported, never frozen
+  subset: FD001
+  tr_fraction: 0.25
+  max_epochs: 2
+  patience: 1
+  trials_per_study: 2
+  study_seed: 99
+  space_override:
+    dualdim: {d_model: {type: categorical, choices: [32]}, n_layers_t: {type: categorical, choices: [1]},
+              n_layers_c: {type: categorical, choices: [1]}, d_ff: {type: categorical, choices: [64]},
+              head_hidden: {type: categorical, choices: [64]}}
+
+r4_lstm_study_timeout_min:                           # round 4: tune.py --timeout-min per subset (3.0 x 4 x trial estimate)
+  basis: "largest config hidden 128 x 3 layers, batch 64, 150 epochs, max TR windows of split 0 (L 30), 6.25 ms/step (exp_LSTM_probe det max at L 50), +10% validation"
+  FD001: 46
+  FD002: 119
+  FD003: 57
+  FD004: 139

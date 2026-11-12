@@ -1,0 +1,2882 @@
+[
+ {
+  "subset": "FD001",
+  "seed": 0,
+  "L": 50,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 3,
+  "N_prime_end_padding": 4,
+  "time_tokens_per_sensor_incl_anchor": 5,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    4,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    5,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 41600,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1019649,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD001",
+  "seed": 1,
+  "L": 50,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 3,
+  "N_prime_end_padding": 4,
+  "time_tokens_per_sensor_incl_anchor": 5,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    4,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    5,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 41600,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1019649,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD001",
+  "seed": 2,
+  "L": 50,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 3,
+  "N_prime_end_padding": 4,
+  "time_tokens_per_sensor_incl_anchor": 5,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    4,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    5,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 41600,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1019649,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD001",
+  "seed": 3,
+  "L": 50,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 3,
+  "N_prime_end_padding": 4,
+  "time_tokens_per_sensor_incl_anchor": 5,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    4,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    5,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 41600,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1019649,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD001",
+  "seed": 4,
+  "L": 50,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 3,
+  "N_prime_end_padding": 4,
+  "time_tokens_per_sensor_incl_anchor": 5,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    4,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    5,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 41600,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1019649,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD002",
+  "seed": 0,
+  "L": 50,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168801,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD002",
+  "seed": 1,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD002",
+  "seed": 2,
+  "L": 50,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168801,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD002",
+  "seed": 3,
+  "L": 50,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168801,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD002",
+  "seed": 4,
+  "L": 50,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168801,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD003",
+  "seed": 0,
+  "L": 50,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127841,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD003",
+  "seed": 1,
+  "L": 50,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127841,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD003",
+  "seed": 2,
+  "L": 50,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127841,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD003",
+  "seed": 3,
+  "L": 50,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127841,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD003",
+  "seed": 4,
+  "L": 50,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127841,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD004",
+  "seed": 0,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD004",
+  "seed": 1,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD004",
+  "seed": 2,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD004",
+  "seed": 3,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD004",
+  "seed": 4,
+  "L": 50,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   50
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160609,
+  "cell": "exp_B16 (frozen, L=50)"
+ },
+ {
+  "subset": "FD001",
+  "seed": 0,
+  "L": 40,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1018369,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD001",
+  "seed": 1,
+  "L": 40,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1018369,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD001",
+  "seed": 2,
+  "L": 40,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1018369,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD001",
+  "seed": 3,
+  "L": 40,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1018369,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD001",
+  "seed": 4,
+  "L": 40,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1018369,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD002",
+  "seed": 0,
+  "L": 40,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168481,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD002",
+  "seed": 1,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD002",
+  "seed": 2,
+  "L": 40,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168481,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD002",
+  "seed": 3,
+  "L": 40,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168481,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD002",
+  "seed": 4,
+  "L": 40,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 8192,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168481,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD003",
+  "seed": 0,
+  "L": 40,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127521,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD003",
+  "seed": 1,
+  "L": 40,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127521,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD003",
+  "seed": 2,
+  "L": 40,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127521,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD003",
+  "seed": 3,
+  "L": 40,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127521,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD003",
+  "seed": 4,
+  "L": 40,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 5632,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127521,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD004",
+  "seed": 0,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD004",
+  "seed": 1,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD004",
+  "seed": 2,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD004",
+  "seed": 3,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD004",
+  "seed": 4,
+  "L": 40,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   40
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    3,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    4,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 7680,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 160289,
+  "cell": "exp_A12 L=40"
+ },
+ {
+  "subset": "FD001",
+  "seed": 0,
+  "L": 30,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1017089,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD001",
+  "seed": 1,
+  "L": 30,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1017089,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD001",
+  "seed": 2,
+  "L": 30,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1017089,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD001",
+  "seed": 3,
+  "L": 30,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1017089,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD001",
+  "seed": 4,
+  "L": 30,
+  "C": 13,
+  "P_t": 15,
+  "S_t": 15,
+  "d_model": 128,
+  "K_layers": 3,
+  "heads": 4,
+  "batch": 128,
+  "N_no_padding": 2,
+  "N_prime_end_padding": 3,
+  "time_tokens_per_sensor_incl_anchor": 4,
+  "sensor_stage_tokens": 13,
+  "input": [
+   128,
+   13,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1664,
+    3,
+    128
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1664,
+    4,
+    128
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    13,
+    128
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 26624,
+  "attn_ops_sensor_per_layer_sample": 21632,
+  "n_params": 1017089,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD002",
+  "seed": 0,
+  "L": 30,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4608,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168161,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD002",
+  "seed": 1,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD002",
+  "seed": 2,
+  "L": 30,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4608,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168161,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD002",
+  "seed": 3,
+  "L": 30,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4608,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168161,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD002",
+  "seed": 4,
+  "L": 30,
+  "C": 16,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 16,
+  "input": [
+   128,
+   16,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    2048,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    2048,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    16,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4608,
+  "attn_ops_sensor_per_layer_sample": 8192,
+  "n_params": 168161,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD003",
+  "seed": 0,
+  "L": 30,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 3168,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127201,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD003",
+  "seed": 1,
+  "L": 30,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 3168,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127201,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD003",
+  "seed": 2,
+  "L": 30,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 3168,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127201,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD003",
+  "seed": 3,
+  "L": 30,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 3168,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127201,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD003",
+  "seed": 4,
+  "L": 30,
+  "C": 11,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 11,
+  "input": [
+   128,
+   11,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1408,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1408,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    11,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 3168,
+  "attn_ops_sensor_per_layer_sample": 3872,
+  "n_params": 127201,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD004",
+  "seed": 0,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD004",
+  "seed": 1,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD004",
+  "seed": 2,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD004",
+  "seed": 3,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ },
+ {
+  "subset": "FD004",
+  "seed": 4,
+  "L": 30,
+  "C": 15,
+  "P_t": 20,
+  "S_t": 20,
+  "d_model": 32,
+  "K_layers": 2,
+  "heads": 2,
+  "batch": 128,
+  "N_no_padding": 1,
+  "N_prime_end_padding": 2,
+  "time_tokens_per_sensor_incl_anchor": 3,
+  "sensor_stage_tokens": 15,
+  "input": [
+   128,
+   15,
+   30
+  ],
+  "output": [
+   128
+  ],
+  "measured_shapes": {
+   "patch_tokens_p0 (B*C, N', d)": [
+    1920,
+    2,
+    32
+   ],
+   "time_stage_out (B*C, N'+1, d)": [
+    1920,
+    3,
+    32
+   ],
+   "sensor_stage_out (B, C, d)": [
+    128,
+    15,
+    32
+   ],
+   "head_out (B,)": [
+    128
+   ]
+  },
+  "attn_ops_time_per_layer_sample": 4320,
+  "attn_ops_sensor_per_layer_sample": 7200,
+  "n_params": 159969,
+  "cell": "exp_A12 L=30"
+ }
+]

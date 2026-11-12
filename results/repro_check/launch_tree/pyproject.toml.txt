@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "saca-rul"
+version = "1.0.0"
+description = "Release code for the ESWA revision: corrected PatchTST-style RUL model, SACA (D4), baselines, tables and figures."
+requires-python = ">=3.12"
+dependencies = [
+  "numpy==2.1.3",
+  "pandas==2.3.1",
+  "scipy==1.16.1",
+  "scikit-learn==1.7.1",
+  "torch==2.8.0",
+  "optuna==4.5.0",
+  "PyYAML==6.0.3",
+  "matplotlib==3.10.5",
+  "psutil",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy", "types-PyYAML", "pandas-stubs", "scipy-stubs"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+saca_rul = ["vendored/LICENSES/*", "vendored/VENDORED.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "frozen: needs the frozen workspace artifacts (SACA_FROZEN_ROOT); skipped when they are absent",
+  "gpu: needs a CUDA device (never run in the default selection)",
+]
+addopts = "-q -m 'not gpu'"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["src/saca_rul/vendored"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E741", "B905"]
+
+[tool.ruff.lint.per-file-ignores]
+# Submitted-code bug evidence: kept byte-identical to the reviewed scripts (sha256 in RELEASE_FILES.md).
+"bug_evidence/*" = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "src"
+ignore_missing_imports = true
+warn_unused_ignores = false
+check_untyped_defs = true
+exclude = ["^src/saca_rul/vendored/"]
+
+[[tool.mypy.overrides]]
+module = "saca_rul.vendored.*"
+ignore_errors = true
+follow_imports = "skip"
+
+[[tool.mypy.overrides]]
+# Analysis ports of the frozen table/figure/post-hoc generators: bodies are kept as frozen (byte-identical outputs
+# are the acceptance test), so they are checked with untyped defs allowed.
+module = ["saca_rul.reporting.*"]
+disallow_untyped_defs = false
+check_untyped_defs = false

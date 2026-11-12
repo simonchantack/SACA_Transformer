@@ -1,0 +1,24 @@
+torch 2.8.0+cu128 | device cpu
+
+[1] One TransformerBatchNormEncoderLayer (eval, dropout 0), input (B=4, L=7, d=64)
+  self_attn output shape: (4, 7, 64) | shape after [0]: (7, 64)
+  sample 0: |added term - attn_out[sample 0]| = 1.1e-07; |added term - attn_out[sample 0] (its own)| = 0.000
+  sample 1: |added term - attn_out[sample 0]| = 1.2e-07; |added term - attn_out[sample 1] (its own)| = 0.519
+  sample 2: |added term - attn_out[sample 0]| = 1.2e-07; |added term - attn_out[sample 2] (its own)| = 0.631
+  sample 3: |added term - attn_out[sample 0]| = 1.2e-07; |added term - attn_out[sample 3] (its own)| = 0.462
+  Every sample receives sample 0's attention output; samples 1-3 never receive their own.
+  per-sample |output change| after perturbing sample 0 only: [2307.68994140625, 663.5579833984375, 666.2620239257812, 662.8090209960938]
+
+[2] Saved FD001 ITT ensemble (BestModelsImproved/1 Improved Transformer/FD001/RMSE_11-948 Ensemble Lowest RMSE 11-7/Models/BEST_improved_FD001.pt), 100 FD001 test engines, window 40
+  inputs (100, 13, 40) | ensemble members 3 | features 13
+  RMSE batch 64 (as in the code, DataLoader batch_size=64, shuffle=False): 11.949
+  RMSE batch 1  (each engine alone)                                     : 12.297
+  RMSE batch 100 (all engines in one batch)                              : 11.757
+  RMSE batch 64, engines in shuffled order (rng seed 0)                  : 11.717
+  per-engine |pred(batch 64) - pred(batch 1)|: max 14.41, mean 2.00 cycles; engines differing > 1 cycle: 62 / 100
+  engines that are first in their batch of 64 (rows 0 and 64): |diff| = 7.63e-06, 0.00e+00
+
+[3] Replace only test engine 1 (row 0) and re-predict at batch 64:
+  max |pred change| on rows 1..63 (same batch): 3.29 cycles; rows 64..99 (other batch): 5.09e-06
+
+KEY RESULT: the [0] index adds sample 0's attention output to every sample; the saved FD001 ensemble gives test RMSE 11.949 at batch 64 vs 12.297 at batch 1 (and 11.717 when the same engines are shuffled), and changing one engine moves the predictions of the other engines in its batch by up to 3.29 cycles.

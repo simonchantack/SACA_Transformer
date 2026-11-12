@@ -1,0 +1,25 @@
+import json,re,subprocess,sys,os,shutil
+sys.stdout.reconfigure(encoding='utf-8')
+exec(open('replay.py',encoding='utf-8').read().split("ev=json.load")[0])
+ev=json.load(open('events.json',encoding='utf-8'))
+TOOLS=SP+"/tools"
+PYX="C:/Geek Squad Back Up 2025/UHD_3/MSAI_Thesis_Work/Code_Repo/Final Code and Files Backup/venv2/Scripts/python.exe"
+def run(c, tag):
+    c=remap(c)
+    r=subprocess.run(['bash','-c',c],capture_output=True,text=True,encoding='utf-8',errors='replace')
+    print(tag,r.returncode,(r.stdout+r.stderr)[-300:].replace('\n',' | '))
+def pyonly(i):
+    c=ev[i]['input']['command']; k=c.index('PYEOF',c.index('PYEOF')+5)+5; return c[:k]
+mode=sys.argv[1]
+if mode=='pre99':
+    run(pyonly(99),'99')
+    run("cd /c/Users/Owner/Documents/ESWA_Revision; cp workspace/review/bug_evidence/{_fd001_pipeline.py,r01_attention_axis.py,r02_batch_dependence.py,r06_nasa_score.py,r01_attention_axis_output.txt,r02_batch_dependence_output.txt,r06_nasa_score_output.txt} final/bug_evidence/ 2>&1; mkdir -p final/bug_evidence; cp workspace/review/bug_evidence/{_fd001_pipeline.py,r01_attention_axis.py,r02_batch_dependence.py,r06_nasa_score.py,r01_attention_axis_output.txt,r02_batch_dependence_output.txt,r06_nasa_score_output.txt} final/bug_evidence/",'42')
+elif mode=='post':
+    D="cd /c/Users/Owner/Documents/ESWA_Revision/final && "
+    run(D+f'PYTHONPATH="{TOOLS}" "{PYX}" -m ruff check . --fix -q 2>&1 | tail -5','128 ruff --fix')
+    run(pyonly(130),'130')
+    run(D+"sed -i 's/^line-length = 120/line-length = 130/' pyproject.toml",'132')
+    run(pyonly(133),'133'); run(ev[135]['input']['command'],'135'); run(pyonly(136),'136')
+    run(pyonly(138),'138'); run(pyonly(139),'139'); run(pyonly(140),'140'); run(pyonly(141),'141')
+    run(D+ev[155]['input']['command'].split('&& PY=')[0].split('&& ',1)[1] if False else D+re.search(r"sed -i '.*?' pyproject.toml", ev[155]['input']['command']).group(0),'155')
+    run(pyonly(158),'158')

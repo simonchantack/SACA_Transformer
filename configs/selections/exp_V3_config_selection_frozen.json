@@ -1,0 +1,158 @@
+{
+ "experiment_id": "exp_V3",
+ "model": "ridge",
+ "per_subset": {
+  "FD001": {
+   "trial_id": "0:1",
+   "value": 17.243124105322917,
+   "params": {
+    "L": 40,
+    "alpha": 224.2012371372442
+   },
+   "n_params": 521,
+   "C": 13,
+   "features": [
+    "sm_2",
+    "sm_3",
+    "sm_4",
+    "sm_7",
+    "sm_8",
+    "sm_9",
+    "sm_11",
+    "sm_12",
+    "sm_13",
+    "sm_15",
+    "sm_17",
+    "sm_20",
+    "sm_21"
+   ],
+   "n_completed_pooled": 12,
+   "study_best_values": [
+    17.243124105322917,
+    17.299820744675877,
+    17.298046740561553
+   ],
+   "study_best_spread": 0.05669663935296043,
+   "pooled_trials_sha256": "06cf695d16c710c2ddd35e6fea6d5748935e1008df29b1a9029ca35805af657b",
+   "frozen_at": "2026-10-26T00:23:37",
+   "test_data_used": false,
+   "wall_s": 2.7329351902008057
+  },
+  "FD003": {
+   "trial_id": "2:2",
+   "value": 16.48980557999338,
+   "params": {
+    "L": 50,
+    "alpha": 1.4957278000601966
+   },
+   "n_params": 551,
+   "C": 11,
+   "features": [
+    "sm_2",
+    "sm_3",
+    "sm_4",
+    "sm_9",
+    "sm_11",
+    "sm_12",
+    "sm_13",
+    "sm_15",
+    "sm_17",
+    "sm_20",
+    "sm_21"
+   ],
+   "n_completed_pooled": 12,
+   "study_best_values": [
+    16.550284586233605,
+    16.49105570101994,
+    16.48980557999338
+   ],
+   "study_best_spread": 0.060479006240225175,
+   "pooled_trials_sha256": "2d3d850959768fc0067f9ea81a79d38be12cecb7c39c50273fa518e1cc1b0e4a",
+   "frozen_at": "2026-10-26T00:23:39",
+   "test_data_used": false,
+   "wall_s": 1.9759769439697266
+  },
+  "FD002": {
+   "trial_id": "2:2",
+   "value": 17.54579661338506,
+   "params": {
+    "L": 50,
+    "alpha": 1.4957278000601966
+   },
+   "n_params": 801,
+   "C": 16,
+   "features": [
+    "sm_2",
+    "sm_3",
+    "sm_4",
+    "sm_6",
+    "sm_7",
+    "sm_8",
+    "sm_9",
+    "sm_10",
+    "sm_11",
+    "sm_12",
+    "sm_13",
+    "sm_14",
+    "sm_15",
+    "sm_17",
+    "sm_20",
+    "sm_21"
+   ],
+   "n_completed_pooled": 12,
+   "study_best_values": [
+    17.90991839097033,
+    17.545849070533617,
+    17.54579661338506
+   ],
+   "study_best_spread": 0.3641217775852681,
+   "pooled_trials_sha256": "e85b900c9d299bf42d82baad643df55139976b21bcc175bee4c8e82b33f3c62d",
+   "frozen_at": "2026-10-26T00:23:45",
+   "test_data_used": false,
+   "wall_s": 5.981980562210083
+  },
+  "FD004": {
+   "trial_id": "2:2",
+   "value": 17.983434125025717,
+   "params": {
+    "L": 50,
+    "alpha": 1.4957278000601966
+   },
+   "n_params": 751,
+   "C": 15,
+   "features": [
+    "sm_2",
+    "sm_3",
+    "sm_4",
+    "sm_6",
+    "sm_7",
+    "sm_9",
+    "sm_10",
+    "sm_11",
+    "sm_12",
+    "sm_13",
+    "sm_14",
+    "sm_15",
+    "sm_17",
+    "sm_20",
+    "sm_21"
+   ],
+   "n_completed_pooled": 12,
+   "study_best_values": [
+    18.365401953161122,
+    17.98363373857668,
+    17.983434125025717
+   ],
+   "study_best_spread": 0.3819678281354051,
+   "pooled_trials_sha256": "b989a9a0dca90bb154b88bf0cf13bad36c64125c2e79f3784a87ce21dacaf3e3",
+   "frozen_at": "2026-10-26T00:23:50",
+   "test_data_used": false,
+   "wall_s": 4.656532526016235
+  }
+ },
+ "rule": "argmin over the 12 pooled completed trials; exact ties -> fewer parameters (C*L + 1), then smaller alpha",
+ "protocol_sha256": "7ba4dea9e02cdcc5637fe3e6b53105ce2b1ca959be2586a10b15bddf773aa610",
+ "ridge_space_sha256": "7dcc526396a3c7d922fc2dc26b43201da2b63b67fab6408be850c7f67f719cb4",
+ "device": "cpu",
+ "dtype": "float64"
+}

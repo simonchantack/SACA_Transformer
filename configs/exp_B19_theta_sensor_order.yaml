@@ -1,0 +1,33 @@
+# theta* sensor-order permutation retrains (post-result exploratory; round-2 determinism setting in the frozen runs); validation only.
+description: theta* sensor-order permutation retrains (post-result exploratory; round-2 determinism setting in the frozen
+  runs); validation only.
+experiment_id: exp_B19
+concerns:
+- R2.16
+- R1.39
+family: dualdim
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_B19_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm:
+  name: sensor_order
+  sensor_order: configs/arms/sensor_orders.json
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: none (validation only)
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_B19
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_03/exp_B19
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}

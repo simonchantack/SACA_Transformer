@@ -1,0 +1,33 @@
+# Corrected base model theta* (ProbSparse, parallel branches): P2-tuned configuration, 5 retrains per subset.
+description: 'Corrected base model theta* (ProbSparse, parallel branches): P2-tuned configuration, 5 retrains per subset.'
+experiment_id: exp_B6
+concerns:
+- R0.1
+- R0.2
+- R0.3
+- R0.4
+- R2.7
+family: dualdim
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_B6_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm: {}
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: evaluate_test (purpose final) after selection_frozen.json
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_B6
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_02/exp_B6
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}

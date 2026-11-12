@@ -1,0 +1,29 @@
+# Ridge baseline (CPU, float64, closed form).
+description: Ridge baseline (CPU, float64, closed form).
+experiment_id: exp_V3
+concerns:
+- R1.19
+family: ridge
+protocol: configs/protocols/protocol_P2_r4.yaml
+selection: configs/selections/exp_V3_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm: {}
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: evaluate_test (purpose r4_final_baseline)
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_V3
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_04/exp_V3
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}

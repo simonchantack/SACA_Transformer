@@ -1,0 +1,115 @@
+"""Tests against the frozen artifacts (skipped when the workspace is absent): table and post-hoc hash matches,
+frozen checkpoints load into the released model classes, no new test reads, release-gate greps."""
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import pytest
+
+from saca_rul.config import ROOT, load_config
+from saca_rul.reporting import verify as V
+from saca_rul.reporting.posthoc_common import WS
+
+pytestmark = pytest.mark.frozen
+WSP = Path(WS)
+
+
+def sha(p: Path) -> str:
+    return hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+def test_final_rows_sha_and_selection_sha() -> None:
+    assert sha(ROOT / "results/frozen/final_rows.json") == "deaed352e5d4b3d0753121fb783842b4949fa564b6be519989083350d272c53c"
+    sums = json.loads((ROOT / "configs/selections/SHA256_selections.json").read_text())
+    for k, h in sums.items():
+        assert sha(ROOT / f"configs/selections/{k}_config_selection_frozen.json") == h
+    assert sha(ROOT / "configs/data_splits.json") == "88840135f2020050a989230ea00da9428d0d1d81dd84c2c96370876144940eab"
+    assert sha(ROOT / "configs/protocols/protocol_P2.yaml") == "d41d8bd82494264ffcd6aa819947a12408a969a2635c400b4cf0a60a0d6e01e7"
+
+
+def test_combined_table_v4_regenerates_with_matching_hashes(tmp_path: Path) -> None:
+    res = V.verify_tables(tmp_path)
+    assert res["combined_table_v4.csv"]["hash_match_direct"]
+    assert res["combined_table_v4.json"]["hash_match_after_provenance_substitution"]
+    assert res["combined_table_v4.md"]["hash_match_after_provenance_substitution"]
+    assert res["test_log_check"]["prefix_401_rows_hash_equals_generation_value"]
+
+
+@pytest.mark.parametrize("name", ["R2.10", "R0.23_c"])
+def test_posthoc_regeneration_matches_frozen(name: str, tmp_path: Path) -> None:
+    r = V.verify_posthoc(name, tmp_path)
+    assert r["only_ignored_keys_differ"], r
+
+
+def test_shipped_r124_outputs_match_their_hashes() -> None:
+    ok = V.verify_shipped(WSP / "experiments/final/posthoc_R1.24", ROOT / "results/frozen/R1.24_SHA256SUMS.txt")
+    assert ok and all(ok.values()), ok
+
+
+def test_test_log_has_not_grown() -> None:
+    rows = sum(1 for _ in open(WSP / "experiments/test_eval_log.csv", "rb")) - 1
+    assert rows == 404
+    assert not (WSP / "gpu.lock").exists()
+
+
+def test_frozen_d4_checkpoint_loads_and_reproduces_saved_validation_predictions() -> None:
+    """Strict state-dict load into the released D4 class; CPU predictions equal the saved ones to float noise."""
+    from saca_rul import checkpoint as CK
+    from saca_rul import data as D
+
+    cfg = load_config(ROOT / "configs/exp_B16_d4_main.yaml")
+    run = Path(cfg["paths"]["frozen_dir"]) / "runs" / "FD001_seed0"
+    model, meta = CK.load_for_eval(run / "ckpt_rmse.pt")
+    cache = D.DataCache("FD001", 0, cfg["paths"]["data_dir"], cfg["paths"]["splits"])
+    assert cache.features == meta["features"]
+    pv = CK.predict(model, cache.windows(meta["L"])["Xva"], 256)
+    ref = pd.read_csv(run / "preds_val.csv")
+    assert np.abs(pv - ref.y_pred.to_numpy()).max() < 1e-3
+
+
+@pytest.mark.parametrize("cfgname,subset", [("exp_B6_theta_star", "FD001"), ("exp_B10_patchtst", "FD001"),
+                                            ("exp_B11_itransformer", "FD001"), ("exp_B12_crossformer", "FD001"),
+                                            ("exp_V2_lstm", "FD001")])
+def test_other_frozen_checkpoints_load_strictly(cfgname: str, subset: str) -> None:
+    from saca_rul import checkpoint as CK
+
+    cfg = load_config(ROOT / f"configs/{cfgname}.yaml")
+    fdir = cfg["paths"].get("frozen_dir_by_subset", {}).get(subset, cfg["paths"]["frozen_dir"])
+    model, meta = CK.load_for_eval(Path(fdir) / "runs" / f"{subset}_seed0" / "ckpt_rmse.pt")
+    assert meta["L"] > 0 and not model.training
+
+
+def test_released_tree_has_no_test_selection_code() -> None:
+    """R0.4 release gate: no sort, min, max or comparison on a test metric anywhere in src/."""
+    banned = [r"sort\w*\([^)]*test", r"best_rmse", r"test_mets", r"lb\[0\]", r"min\([^)]*test_(rmse|score)",
+              r"argmin[^\n]*test", r"leaderboard"]
+    for f in (ROOT / "src").rglob("*.py"):
+        if "vendored" in f.parts:
+            continue
+        text = f.read_text(encoding="utf-8")
+        for pat in banned:
+            assert not re.search(pat, text, re.I), (f.name, pat)
+    for bad in ("encoder_fusion_experiment", "improve_transformer", "OptHypTun", "OptHypTune", "patchtst_crossattn",
+                "improve_rul_zone"):
+        assert not list(ROOT.rglob(f"{bad}*")), bad
+
+
+def test_licensed_material_is_absent() -> None:
+    assert not list(ROOT.rglob("Saxena2008*")) and not list(ROOT.rglob("_render"))
+
+
+def test_shipped_per_seed_metrics_equal_their_frozen_sources() -> None:
+    for line in (ROOT / "results/frozen/metrics/SHA256SUMS.txt").read_text(encoding="utf-8").splitlines():
+        h, name, _arrow, src = line.split()[:4]
+        assert sha(WSP / src) == h and sha(ROOT / "results/frozen/metrics" / name) == h
+
+
+def test_shipped_frozen_tables_equal_the_workspace_files() -> None:
+    for f in ("combined_table_v4.csv", "combined_table_v4.json", "combined_table_v4.md"):
+        assert sha(ROOT / "results/frozen" / f) == sha(WSP / "experiments/final" / f)
+    assert sha(ROOT / "results/frozen/run_regime_split.py") == sha(WSP / "experiments/final/posthoc_R1.24/run_regime_split.py")

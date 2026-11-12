@@ -1,0 +1,231 @@
+"""Attention modules: ProbSparse (corrected submitted base model, theta*) and exact softmax attention (D1-D4).
+
+ProbSparse follows Informer (Zhou et al. 2021) with the corrections of the revision (R0.1, R0.2, R0.19):
+  * The multi-head wrapper passes ``(B, L, H, d_k)`` to ``ProbAttention``, the layout it unpacks. The submitted wrapper
+    passed ``(B, H, L, d_k)``, so attention ran over heads, not tokens (R0.1; evidence in ``bug_evidence/``).
+  * The wrapper returns the ``(output, weights)`` tuple that ``nn.MultiheadAttention`` returns. The submitted encoder
+    layer took element ``[0]`` of a single tensor, which selected batch row 0 and added it to every sample (R0.2).
+  * In eval mode the key sample is drawn from a CPU generator re-seeded with ``eval_seed`` on every call, so a
+    prediction depends only on its own input. When every query is kept (u >= L_Q) or only one key exists, full softmax
+    attention is computed directly.
+Training mode keeps the global CPU RNG (Informer behaviour).
+
+``ExactAttention`` replaces ProbSparse in D1-D4: softmax(Q K^T / sqrt(d)) V over all keys with
+``F.scaled_dot_product_attention``, no dropout, no mask, no random draw.
+"""
+from __future__ import annotations
+
+import math
+from math import sqrt
+from typing import Any
+
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+class ProbMask:
+    """Causal mask for the selected queries (used only when ``mask_flag`` is True; no encoder passes a mask)."""
+
+    def __init__(self, B: int, H: int, L: int, index: torch.Tensor, scores: torch.Tensor, device: Any = "cpu") -> None:
+        _mask = torch.ones(L, scores.shape[-1], dtype=torch.bool).to(device).triu(1)
+        _mask_ex = _mask[None, None, :].expand(B, H, L, scores.shape[-1])
+        indicator = _mask_ex[torch.arange(B)[:, None, None], torch.arange(H)[None, :, None], index, :].to(device)
+        self._mask = indicator.view(scores.shape).to(device)
+
+    @property
+    def mask(self) -> torch.Tensor:
+        return self._mask
+
+
+class ProbAttention(nn.Module):
+    """ProbSparse self-attention core. queries (B, L_Q, H, D), keys/values (B, L_K, H, D) -> (B, L_Q, H, D)."""
+
+    def __init__(self, mask_flag: bool = True, factor: int = 5, scale: float | None = None,
+                 attention_dropout: float = 0.1, output_attention: bool = False, eval_seed: int = 0,
+                 exact_when_full: bool = True) -> None:
+        super().__init__()
+        self.factor = factor
+        self.scale = scale
+        self.mask_flag = mask_flag
+        self.output_attention = output_attention
+        self.dropout = nn.Dropout(attention_dropout)  # unused, as in Informer and the submitted code
+        self.eval_seed = eval_seed
+        self.exact_when_full = exact_when_full
+        self.last_index_sample: torch.Tensor | None = None
+        self.last_index: torch.Tensor | None = None
+
+    def _sample_index(self, L_K: int, L_Q: int, sample_k: int) -> torch.Tensor:
+        """(L_Q, sample_k) key indices drawn on the CPU."""
+        if self.training:
+            return torch.randint(L_K, (L_Q, sample_k))  # global RNG (Informer behaviour)
+        g = torch.Generator(device="cpu")
+        g.manual_seed(int(self.eval_seed))  # re-seeded on every call -> deterministic
+        return torch.randint(L_K, (L_Q, sample_k), generator=g)
+
+    def _prob_QK(self, Q: torch.Tensor, K: torch.Tensor, sample_k: int, n_top: int,
+                 index_sample: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor]:
+        B, H, L_K, E = K.shape
+        _, _, L_Q, _ = Q.shape
+        dev = Q.device
+        if index_sample is None:
+            index_sample = self._sample_index(L_K, L_Q, sample_k)
+        self.last_index_sample = index_sample
+        K_sample = K[:, :, index_sample.to(dev, non_blocking=True), :]
+        Q_K_sample = torch.matmul(Q.unsqueeze(-2), K_sample.transpose(-2, -1)).squeeze(-2)
+        M = Q_K_sample.max(-1)[0] - torch.div(Q_K_sample.sum(-1), L_K)
+        M_top = M.topk(n_top, sorted=False)[1]
+        Q_reduce = torch.gather(Q, 2, M_top.unsqueeze(-1).expand(B, H, n_top, E))
+        Q_K = torch.matmul(Q_reduce, K.transpose(-2, -1))
+        return Q_K, M_top
+
+    def _get_initial_context(self, V: torch.Tensor, L_Q: int) -> torch.Tensor:
+        B, H, L_V, D = V.shape
+        if not self.mask_flag:
+            V_sum = V.mean(dim=-2)
+            return V_sum.unsqueeze(-2).expand(B, H, L_Q, V_sum.shape[-1]).clone()
+        assert L_Q == L_V  # masked self-attention only
+        return V.cumsum(dim=-2)
+
+    def _update_context(self, context_in: torch.Tensor, V: torch.Tensor, scores: torch.Tensor, index: torch.Tensor,
+                        L_Q: int) -> tuple[torch.Tensor, torch.Tensor | None]:
+        B, H, L_V, D = V.shape
+        dev = V.device
+        if self.mask_flag:
+            attn_mask = ProbMask(B, H, L_Q, index, scores, device=V.device)
+            scores.masked_fill_(attn_mask.mask, -np.inf)
+        attn = torch.softmax(scores, dim=-1)
+        bi = torch.arange(B, device=dev)[:, None, None]
+        hi = torch.arange(H, device=dev)[None, :, None]
+        context_in[bi, hi, index, :] = torch.matmul(attn, V).type_as(context_in)
+        if self.output_attention:
+            attns = (torch.ones([B, H, L_Q, L_V], device=dev) / L_V).type_as(attn)
+            attns[bi, hi, index, :] = attn
+            return context_in, attns
+        return context_in, None
+
+    def forward(self, queries: torch.Tensor, keys: torch.Tensor, values: torch.Tensor,
+                attn_mask: torch.Tensor | None = None,
+                index_sample: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor | None]:
+        B, L_Q, H, D = queries.shape
+        _, L_K, _, _ = keys.shape
+        queries = queries.transpose(2, 1)
+        keys = keys.transpose(2, 1)
+        values = values.transpose(2, 1)
+        U_part = self.factor * np.ceil(np.log(L_K)).astype("int").item()  # c*ln(L_k)
+        u = self.factor * np.ceil(np.log(L_Q)).astype("int").item()  # c*ln(L_q)
+        U_part = U_part if U_part < L_K else L_K
+        u = u if u < L_Q else L_Q
+        scale = self.scale or 1.0 / sqrt(D)
+
+        if self.exact_when_full and (u >= L_Q or U_part == 0) and not self.mask_flag:
+            scores = torch.matmul(queries, keys.transpose(-2, -1)) * scale
+            attn = torch.softmax(scores, dim=-1)
+            context = torch.matmul(attn, values)
+            self.last_index_sample = None
+            self.last_index = None
+            return context.transpose(2, 1).contiguous(), (attn if self.output_attention else None)
+
+        if self.exact_when_full and (u >= L_Q or U_part == 0):
+            index = torch.arange(L_Q, device=queries.device).expand(B, H, L_Q)
+            scores_top = torch.matmul(queries, keys.transpose(-2, -1))
+            self.last_index_sample = None
+        else:
+            if U_part == 0 or u == 0:
+                raise ValueError(f"ProbAttention: sequence too short for the sparse path (L_Q={L_Q}, L_K={L_K}); "
+                                 f"set exact_when_full=True")
+            scores_top, index = self._prob_QK(queries, keys, sample_k=U_part, n_top=u, index_sample=index_sample)
+        self.last_index = index
+        scores_top = scores_top * scale
+        context = self._get_initial_context(values, L_Q)
+        context, attn = self._update_context(context, values, scores_top, index, L_Q)
+        return context.transpose(2, 1).contiguous(), attn
+
+
+class ExactAttention(nn.Module):
+    """Drop-in replacement for ``ProbAttention`` (same call signature, no parameters).
+
+    queries (B, L_Q, H, D), keys/values (B, L_K, H, D) -> context (B, L_Q, H, D), weights (B, H, L_Q, L_K) or None.
+    With ``output_attention`` the weights are computed explicitly (diagnostics only)."""
+
+    def __init__(self, output_attention: bool = False) -> None:
+        super().__init__()
+        self.output_attention = bool(output_attention)
+        self.mask_flag = False
+
+    def forward(self, queries: torch.Tensor, keys: torch.Tensor, values: torch.Tensor,
+                attn_mask: torch.Tensor | None = None,
+                index_sample: torch.Tensor | None = None) -> tuple[torch.Tensor, torch.Tensor | None]:
+        if attn_mask is not None:
+            raise NotImplementedError("ExactAttention: masks are not used by any encoder")
+        q = queries.transpose(1, 2)
+        k = keys.transpose(1, 2)
+        v = values.transpose(1, 2)
+        if self.output_attention:
+            scale = 1.0 / math.sqrt(q.shape[-1])
+            a = torch.softmax(torch.matmul(q, k.transpose(-2, -1)) * scale, dim=-1)
+            ctx = torch.matmul(a, v)
+            return ctx.transpose(1, 2).contiguous(), a
+        ctx = F.scaled_dot_product_attention(q, k, v, attn_mask=None, dropout_p=0.0, is_causal=False)
+        return ctx.transpose(1, 2).contiguous(), None
+
+
+class MultiheadSelfAttention(nn.Module):
+    """Multi-head attention with q/k/v/out projections around an attention core.
+
+    ``kind="prob"`` uses ``ProbAttention`` (theta*); ``kind="exact"`` uses ``ExactAttention`` (D1-D4).
+    Both register the core as ``self.attn`` and the four projections in the order q, k, v, out, so the parameter
+    initialisation order and the state-dict keys are the same for both kinds."""
+
+    def __init__(self, d_model: int, nhead: int, dropout: float = 0.1, kind: str = "prob", eval_seed: int = 0,
+                 exact_when_full: bool = True, output_attention: bool = False) -> None:
+        super().__init__()
+        assert d_model % nhead == 0
+        self.batch_first = True  # read by nn.TransformerEncoder's fast-path check
+        self.d_model = d_model
+        self.nhead = nhead
+        self.d_k = d_model // nhead
+        self.q_proj = nn.Linear(d_model, d_model)
+        self.k_proj = nn.Linear(d_model, d_model)
+        self.v_proj = nn.Linear(d_model, d_model)
+        self.out_proj = nn.Linear(d_model, d_model)
+        self.attn: nn.Module
+        if kind == "prob":
+            self.attn = ProbAttention(mask_flag=False, factor=5, scale=None, attention_dropout=dropout,
+                                      output_attention=output_attention, eval_seed=eval_seed,
+                                      exact_when_full=exact_when_full)
+        elif kind == "exact":
+            self.attn = ExactAttention(output_attention=output_attention)
+        else:
+            raise ValueError(f"unknown attention kind {kind!r}")
+
+    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
+                attn_mask: torch.Tensor | None = None, key_padding_mask: torch.Tensor | None = None,
+                need_weights: bool = False, **kwargs: Any) -> tuple[torch.Tensor, torch.Tensor | None]:
+        if attn_mask is not None or key_padding_mask is not None:
+            raise NotImplementedError("masks are not supported (no encoder passes one)")
+        B, L_q, _ = query.shape
+        L_k = key.shape[1]
+        q = self.q_proj(query).view(B, L_q, self.nhead, self.d_k)
+        k = self.k_proj(key).view(B, L_k, self.nhead, self.d_k)
+        v = self.v_proj(value).view(B, L_k, self.nhead, self.d_k)
+        out, attn = self.attn(q, k, v, attn_mask=None)
+        out = out.contiguous().view(B, L_q, self.d_model)
+        return self.out_proj(out), attn
+
+
+def set_probsparse(model: nn.Module, eval_seed: int | None = None, exact_when_full: bool | None = None,
+                   output_attention: bool | None = None) -> int:
+    """Set ProbSparse flags on every ``ProbAttention`` in ``model``. Returns the number of modules changed."""
+    n = 0
+    for m in model.modules():
+        if isinstance(m, ProbAttention):
+            if eval_seed is not None:
+                m.eval_seed = int(eval_seed)
+            if exact_when_full is not None:
+                m.exact_when_full = bool(exact_when_full)
+            if output_attention is not None:
+                m.output_attention = bool(output_attention)
+            n += 1
+    return n

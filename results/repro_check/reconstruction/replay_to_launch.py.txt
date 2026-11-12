@@ -1,0 +1,39 @@
+BS=chr(92)
+import json,re,subprocess,sys,os
+sys.stdout.reconfigure(encoding='utf-8')
+SP="C:/Users/Owner/AppData/Local/Temp/claude/C--Users-Owner-Documents-ESWA-Revision/9047e272-f059-4653-9fbc-801ef70db92f/scratchpad"
+SB=SP+"/replay/ESWA_Revision"
+SBS=SP+"/replay/scratch"
+REAL="C:/Users/Owner/Documents/ESWA_Revision"
+def remap(s):
+    s=s.replace("/c/Users/Owner/Documents/ESWA_Revision","/c/"+SB[3:])
+    s=s.replace("C:"+BS+"Users"+BS+"Owner"+BS+"Documents"+BS+"ESWA_Revision",SB.replace("/",BS))
+    s=s.replace(REAL,SB)
+    # scratchpad (not tools)
+    s=s.replace(SP+'"',SBS+'"').replace(SP+'/',SBS+'/') if False else s
+    s=re.sub(re.escape(SP)+r'(?=["\'/ ]|$)(?!/tools)(?!/replay)', SBS, s)
+    s=s.replace(SP.replace("/",BS)+BS+"tools",SP.replace("/",BS)+"@@TOOLS") if False else s
+    return s
+ev=json.load(open('events.json',encoding='utf-8'))
+cut=int(sys.argv[1]); lo=int(sys.argv[2]) if len(sys.argv)>2 else 39
+BASH={39:None,43:None,44:None,45:None,53:None,55:None,56:None,59:None,66:None,68:None,70:None,
+ 74:"cut:cd /c/Users/Owner/Documents/ESWA_Revision/final &&",78:None,80:None,82:"cut:&& T=",90:None,94:"cut:&& T=",
+ 96:"cut:&& export CUDA",99:"cut:cd ../../../..",105:None,115:None,126:"cut:rm -rf results"}
+SKIPLOG=[]
+for i,e in enumerate(ev):
+    if i<lo or i>cut: continue
+    if e['name']=='Write':
+        p=e['input']['file_path']
+        if 'ESWA_Revision'+BS+'final' in p or 'scratchpad' in p:
+            q=remap(p.replace(BS,'/'))
+            os.makedirs(os.path.dirname(q),exist_ok=True)
+            open(q,'w',encoding='utf-8',newline='').write(e['input']['content'])
+            print('W',i,q[-60:])
+    elif e['name']=='Bash' and i in BASH:
+        c=e['input']['command']; m=BASH[i]
+        if m:
+            k=c.index(m[4:], c.index('PYEOF') if 'PYEOF' in c else 0) if i in(74,99,126) else c.index(m[4:])
+            c=c[:k]
+        c=remap(c)
+        r=subprocess.run(['bash','-c',c],capture_output=True,text=True,encoding='utf-8',errors='replace')
+        print('B',i,r.returncode,(r.stdout+r.stderr)[-200:].replace('\n',' | '))

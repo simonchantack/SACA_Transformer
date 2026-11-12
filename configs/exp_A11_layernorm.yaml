@@ -1,0 +1,31 @@
+# D4 with LayerNorm in place of BatchNorm in every encoder layer.
+description: D4 with LayerNorm in place of BatchNorm in every encoder layer.
+experiment_id: exp_A11
+concerns:
+- R1.20
+family: r3_D4
+protocol: configs/protocols/protocol_P2.yaml
+selection: configs/selections/exp_A11_config_selection_frozen.json
+subsets:
+- FD001
+- FD002
+- FD003
+- FD004
+seeds:
+- 0
+- 1
+- 2
+- 3
+- 4
+arm:
+  name: layernorm
+  norm: layer
+determinism: strict (torch.use_deterministic_algorithms(True, warn_only=False), CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+  memory fill)
+test_read: evaluate_test (purpose r4_final_ablation)
+paths:
+  data_dir: ${SACA_DATA_DIR:-../workspace/code_base/Data}
+  splits: configs/data_splits.json
+  output_dir: ${SACA_OUTPUT_DIR:-results/runs}/exp_A11
+  frozen_dir: ${SACA_FROZEN_ROOT:-../workspace/experiments}/round_04/exp_A11/layernorm
+  test_log: ${SACA_TEST_LOG:-results/test_eval_log.csv}
