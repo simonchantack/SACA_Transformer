@@ -12,7 +12,7 @@ This repository holds the code of the paper above. It predicts the remaining use
 
 ## How to cite
 
-If you use this code, please cite the archived release (version DOI): [10.5281/zenodo.24152408](https://doi.org/10.5281/zenodo.24152408). Machine-readable citation metadata are in `CITATION.cff`.
+If you use this code, please cite the archived release (version DOI): [10.5281/zenodo.24237650](https://doi.org/10.5281/zenodo.24237650). Machine-readable citation metadata are in `CITATION.cff`.
 
 ## Main result
 
