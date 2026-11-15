@@ -1,14 +1,14 @@
 # Replay check: launch tree + recorded post-launch edits == shipped tree
 
-**Time of this check: 2026-10-27 05:07 local (fix attempt 1).** "RELEASE_FILES.md" in the table below means the RELEASE_FILES.md
-of the FIRST release (before fix attempt 1), not the current one. **Six files changed after this check**, so for them the
+**Time of this check: 2026-10-27 05:07 local.** "RELEASE_FILES.md" in the table below means the RELEASE_FILES.md
+of the FIRST release (before the corrections made later that day), not the current one. **Six files changed after this check**, so for them the
 "replayed == shipped" and "shipped == RELEASE_FILES.md" columns no longer hold and must not be read as current:
 `src/saca_rul/cli.py` (usage text, docstring only), `src/saca_rul/shapes.py`, `src/saca_rul/reporting/figures.py`
-(rewritten, and again in fix attempt 2), `src/saca_rul/reporting/posthoc_r124.py` (docstring only), `tests/test_frozen.py`
-and `scripts/make_release_list.py` (changed 05:17 in fix attempt 1: `repro_check` dropped from `SKIP_DIRS`, two external-artifact notes extended).
+(rewritten, and edited again later), `src/saca_rul/reporting/posthoc_r124.py` (docstring only), `tests/test_frozen.py`
+and `scripts/make_release_list.py` (changed at 05:17: `repro_check` dropped from `SKIP_DIRS`, two external-artifact notes extended).
 The table itself is left as it was at 05:07.
 
-The launch tree was rebuilt by replaying the Write/Edit/Bash tool calls of the build session (up to the relaunch at 2026-10-27 04:37:53 local).
+The launch tree was rebuilt by replaying the recorded commands (up to the relaunch at 2026-10-27 04:37:53 local).
 The post-launch steps (ruff --fix, then the scripted typing/lint edits and the new tune/freeze sub-commands) were replayed on top of it,
 with the same ruff 0.17.3 and the pyproject.toml of that moment. Result per shipped .py file (outside vendored/):
 
