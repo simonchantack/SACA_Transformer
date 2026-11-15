@@ -8,8 +8,7 @@ authors:
     orcid: "https://orcid.org/0009-0008-6004-7085"
   - family-names: "Pakhrin"
     given-names: "Subash Chandra"
-    # orcid: [TBD — Simon, ask Pakhrin; omit if none]
-version: 1.0.0
+version: 1.0.1
 license: MIT
 repository-code: "https://github.com/simonchantack/SACA_Transformer"
 doi: 10.5281/zenodo.24152408

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "saca-rul"
-version = "1.0.0"
+version = "1.0.1"
 description = "Release code for the ESWA revision: corrected PatchTST-style RUL model, SACA (D4), baselines, tables and figures."
 requires-python = ">=3.12"
 dependencies = [
